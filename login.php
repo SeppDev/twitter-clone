@@ -18,7 +18,7 @@ global $db;
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
     echo $result[0]['id'];
     for ($i = 0; $i < count($result); $i++) {
-        $query = $db->prepare("SELECT * FROM users WHERE id = " . $result[$i]['aut/hor']);
+        $query = $db->prepare("SELECT * FROM users WHERE id = " . $result[$i]['author']);
         $query->execute();
         $result1 = $query->fetch(PDO::FETCH_ASSOC);
         echo "<div class=\"tweet\">
