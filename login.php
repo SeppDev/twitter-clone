@@ -11,15 +11,27 @@ global $db;
 
 <body>
 <div class="wrapper">
-<div class="tweet">
-    <div class="profile">
-        <div class="pfp"><img src="https://i.pinimg.com/474x/39/a2/5c/39a25cdfd53c68f2f9d904e623896c45.jpg" width="60px" height="60px"></div>
-        <div class="name">jhwigdnjn</div>
+
+    <?php
+    $query = $db->prepare("SELECT * FROM posts");
+    $query->execute();
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+    echo $result[0]['id'];
+    for ($i = 0; $i < count($result); $i++) {
+        $query = $db->prepare("SELECT * FROM users WHERE id = " . $result[$i]['aut/hor']);
+        $query->execute();
+        $result1 = $query->fetch(PDO::FETCH_ASSOC);
+        echo "<div class=\"tweet\">
+    <div class=\"profile\">
+        <div class=\"pfp\"><img src=" . $result1['profile_img'] . " width=\"60px\" height=\"60px\"></div>
+        <div class=\"name\">" . $result1['username'] . "</div>
     </div>
-    <div class="content">
-        uguyewgdidetgfuetjffgf4
+    <div class=\"\content\">" . $result[$i]['content'] . "
     </div>
-</div>
+    </div>";
+    }
+    ?>
+
 </div>
 </body>
 </html>
