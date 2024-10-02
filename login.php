@@ -16,7 +16,6 @@ global $db;
     $query = $db->prepare("SELECT * FROM posts");
     $query->execute();
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
-    echo $result[0]['id'];
     for ($i = 0; $i < count($result); $i++) {
         $query = $db->prepare("SELECT * FROM users WHERE id = " . $result[$i]['author']);
         $query->execute();
