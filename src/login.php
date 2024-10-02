@@ -1,4 +1,4 @@
-<?php require "src/modules/database.php"; ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,10 +10,8 @@
 </head>
 
 <body>
-    <?php
-    ?>
-
     <div>
+
         <p>username</p>
         <input type="user" id="username">
         <p>passsword</p>
@@ -25,8 +23,10 @@
             const username = document.getElementById("username");
             const password = document.getElementById("password");
 
+            
+
             button.onclick = () => {
-                fetch("src/api/accounts.php", {
+                fetch("api/accounts.php", {
                     method: "POST",
                     headers: {
                         Username: username.value,

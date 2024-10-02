@@ -14,11 +14,12 @@ if ($GLOBALS["database"]->connect_error) {
 
 function create_user(string $username, string $password)
 {
+    $password_hash = hash("sha256", $password);
+    
     $connection = $GLOBALS["database"];
     $connection->select_db("twitter_clone");
-    $password_hash = hash("sha256", $password);
 
-
-    $sql = "INSERT INTO `users`(`id`, `username`, `password`, `reg_date`, `profile_img`) VALUES (" + "NULL," + $username + "," + $password_hash + ",NULL,LINK" + ")";
-    $connection->query($sql);
+    // $sql = "INSERT INTO `users`(`id`, `username`, `password`, `reg_date`, `profile_img`) VALUES (" . "NULL," . $username . "," . $password_hash . ",NULL,'LINK'" . ")";
+    // echo $sql;
+    // $connection->query($sql);
 }
