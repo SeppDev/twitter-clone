@@ -3,7 +3,7 @@ session_start();
 include "php/database.php";
 global $db;
 ?>
-<html>
+<html lang="">
 <head>
     <title>Chirpify</title>
     <link rel="stylesheet" href="css/style.css">
@@ -22,7 +22,7 @@ global $db;
         $result1 = $query->fetch(PDO::FETCH_ASSOC);
         echo "<div class=\"tweet\">
     <div class=\"profile\">
-        <div class=\"pfp\"><img src=" . $result1['profile_img'] . " width=\"60px\" height=\"60px\"></div>
+        <div class=\"pfp\"><img src=" . $result1['profile_img'] . " width=\"60px\" height=\"60px\" alt=\"\"></div>
         <div class=\"name\">" . $result1['username'] . "</div>
     </div>
     <div class=\"\content\">" . $result[$i]['content'] . "
