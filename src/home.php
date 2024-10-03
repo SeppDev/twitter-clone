@@ -15,12 +15,12 @@ require "modules/database.php";
     
     <?php
         $user = get_user_session();
-        if ($user) {
-            echo $user->username;
-        } else {
-            echo "No user found";
-        }
-        // loadPosts();
+        if (!$user) {
+            header("Location: ./login");
+            die();
+        } 
+        echo $user->username;
+        loadPosts();
         ?>
 
     </div>

@@ -17,12 +17,6 @@
         <button type="submit" id="SignUp">Sign Up</button>
         <button id="Login">Login</button>
 
-        <?php
-        require "modules/database.php";
-
-        echo get_user_session();
-        ?>
-
         <script>
             const container = document.getElementById("login-container");
             const sign_up_button = document.getElementById("SignUp");

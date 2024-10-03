@@ -24,6 +24,11 @@ function build_error(string $message)
 
 function create_user(string $username, string $password)
 {
+
+    if (strlen($username) > 20) {
+        build_error("Username is too long!");
+    }
+
     $password_hash = hash("sha256", $password);
     $connection = $GLOBALS["database"];
 
@@ -66,7 +71,7 @@ function create_user_session(int $userid): string
 {
     $token = substr(base64_encode(random_bytes(50)), 0, 32);
     $connection = $GLOBALS["database"];
-    $sql = sprintf("INSERT INTO `sessions` (`token`, `id`, `expire`) VALUES ('%s', %d, %d)", $token, $userid, 0);
+    $sql = sprintf("INSERT INTO `sessions` (`token`, `id`) VALUES ('%s', %d)", $token, $userid);
     $connection->query($sql);
 
     return $token;
@@ -75,32 +80,30 @@ function create_user_session(int $userid): string
 class User
 {
     public string $username;
-    function __construct(string $username) {
-        $this->$username = $username;
-    }
+    public string $profile_image;
+    public string $reg_date;
 
 }
 
 function get_user_session(): User|null
 {
     $connection = $GLOBALS["database"];
-
-
-    $token = isset($_COOKIE["session_token"]);
+    
+    $token = isset($_COOKIE["session_token"]) ? $_COOKIE["session_token"] : null;
     if (empty($token)) {
         return null;
     }
-
-    $sql = sprintf("SELECT `id` FROM `sessions` WHERE token LIKE \"%s\"", $token);
+    
+    $sql = sprintf("SELECT `id` FROM `sessions` WHERE token LIKE '%s'", $token);
     $result = $connection->query($sql);
-
+    
     $token = $result->fetch_row();
-    if (!$token) {
+    if (empty($token)) {
         return null;
     }
     $id = $token[0];
 
-    $sql = sprintf("SELECT `username` FROM `users` WHERE id LIKE %d", $id);
+    $sql = sprintf("SELECT `username`, `reg_date`, `profile_img` FROM `users` WHERE id LIKE %d", $id);
     $result = $connection->query($sql);
 
     $user = $result->fetch_row();
@@ -108,19 +111,18 @@ function get_user_session(): User|null
         build_error("User not found");
     }
 
-    $name = $user[0];
+    $object = new User();
+    $object->username = $user[0];
+    $object->reg_date = $user[1];
+    $object->profile_image = $user[2];
 
-    echo $name;
-
-    return new User($name);
+    return $object;
 }
 
-$db = new PDO('mysql:host=localhost;dbname=twitter_clone', 'root', '');
 function sql($expression)
 {
-    global $db;
-    $query = $db->query($expression);
-    return $query->fetchAll(PDO::FETCH_ASSOC);
+    $query = $GLOBALS["database"]->query($expression);
+    return $query->fetch_all(PDO::FETCH_ASSOC);
 }
 function post()
 {
