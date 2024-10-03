@@ -108,7 +108,7 @@ function get_user_session(): User|null
 
     $user = $result->fetch_row();
     if (!$user) {
-        build_error("User not found");
+        return null;
     }
 
     $object = new User();
