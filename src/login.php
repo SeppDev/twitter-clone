@@ -10,10 +10,6 @@
 
 <body>
 
-<?php
-    echo random_bytes(32);
-?>
-    
     <div id="login-container" style="display: flex; flex-direction: column">
         <p>username</p>
         <input type="user" id="username">
@@ -30,6 +26,10 @@
             const username = document.getElementById("username");
             const password = document.getElementById("password");
 
+            async function handle_response(response) {
+                console.log(response.body);
+            }
+
             login_button.onclick = async () => {
                 const response = await fetch("api/login", {
                     method: "POST",
@@ -38,7 +38,7 @@
                         Password: password.value
                     }
                 });
-                console.log(response);
+                await handle_response(response);
             }
 
             sign_up_button.onclick = async () => {
@@ -49,6 +49,7 @@
                         Password: password.value
                     }
                 });
+                await handle_response(response);
             }
 
         </script>
