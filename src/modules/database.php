@@ -16,7 +16,8 @@ if ($GLOBALS["database"]->connect_error) {
     exit();
 }
 
-function build_error(string $message) {
+function build_error(string $message)
+{
     die(json_encode(array(
         "error" => $message,
     )));
@@ -71,14 +72,16 @@ function login_user(string $username, string $password)
     )));
 }
 
-function create_user_session(int $userid): string {
+function create_user_session(int $userid): string
+{
     $token = base64_encode(random_bytes(32));
     $tokens[$token] = $userid;
 
     return $token;
 }
 
-function get_user_session(string | null $token): int | null {
+function get_user_session(string|null $token): int|null
+{
     if ($token) {
         return $GLOBALS["sessions"][$token];
     }
@@ -96,11 +99,13 @@ function post()
 {
     return sql("SELECT * FROM posts");
 }
-function author($result) {
+function author($result)
+{
     return sql("SELECT * FROM users WHERE id LIKE " . $result['author']);
 }
 
-function loadPosts() {
+function loadPosts()
+{
     $result = post();
     foreach ($result as $post) {
         $result1 = author($post);
