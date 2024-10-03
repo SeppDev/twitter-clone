@@ -6,6 +6,8 @@ $password = "";
 
 $GLOBALS["sessions"] = array();
 
+
+
 $GLOBALS["database"] = new mysqli($host, $username);
 $GLOBALS["database"]->select_db("twitter_clone");
 
