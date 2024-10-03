@@ -13,6 +13,8 @@ if ($GLOBALS["database"]->connect_error) {
     exit();
 }
 
+// $GLOBALS["database"]->query("CREATE TABLE `twitter_clone`.`sessions` (`token` CHAR(32) NOT NULL , `id` INT(11) NOT NULL , PRIMARY KEY (`token`)) ENGINE = InnoDB; ");
+
 function build_error(string $message)
 {
     die(json_encode(array(
@@ -40,7 +42,7 @@ function login_user(string $username, string $password)
     $password_hash = hash("sha256", $password);
     $connection = $GLOBALS["database"];
 
-    $sql = sprintf("SELECT `id`, `password` FROM `users` WHERE username LIKE \"%s\"", $username);
+    $sql = sprintf("SELECT `id`, `password` FROM `users` WHERE username LIKE '%s'", $username);
     $result = $connection->query($sql);
 
     $user = $result->fetch_row();
@@ -64,27 +66,31 @@ function create_user_session(int $userid): string
 {
     $token = substr(base64_encode(random_bytes(50)), 0, 32);
     $connection = $GLOBALS["database"];
-    $sql = sprintf("INSERT INTO `sessions` (`token`, `id`) VALUES (\"%s\", %d)", $token, $userid);
+    $sql = sprintf("INSERT INTO `sessions` (`token`, `id`, `expire`) VALUES ('%s', %d, %d)", $token, $userid, 0);
     $connection->query($sql);
 
     return $token;
 }
 
-function get_user_session(): int|null
+class User
+{
+    public string $username;
+    function __construct(string $username) {
+        $this->$username = $username;
+    }
+
+}
+
+function get_user_session(): User|null
 {
     $connection = $GLOBALS["database"];
 
-    try {
-        $token = $_COOKIE["session_token"];
-    } catch (e) {
-        return null;
-    }
 
-
+    $token = isset($_COOKIE["session_token"]);
     if (empty($token)) {
         return null;
     }
-    
+
     $sql = sprintf("SELECT `id` FROM `sessions` WHERE token LIKE \"%s\"", $token);
     $result = $connection->query($sql);
 
@@ -94,7 +100,19 @@ function get_user_session(): int|null
     }
     $id = $token[0];
 
-    return $id;
+    $sql = sprintf("SELECT `username` FROM `users` WHERE id LIKE %d", $id);
+    $result = $connection->query($sql);
+
+    $user = $result->fetch_row();
+    if (!$user) {
+        build_error("User not found");
+    }
+
+    $name = $user[0];
+
+    echo $name;
+
+    return new User($name);
 }
 
 $db = new PDO('mysql:host=localhost;dbname=twitter_clone', 'root', '');

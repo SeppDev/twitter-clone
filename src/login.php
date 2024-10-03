@@ -9,7 +9,7 @@
 
 <body>
 
-    <div id="login-container" style="display: flex; flex-direction: column">
+    <form id="login-container" style="display: flex; flex-direction: column">
         <p>username</p>
         <input type="user" id="username">
         <p>passsword</p>
@@ -18,12 +18,13 @@
         <button id="Login">Login</button>
 
         <?php
-            require "modules/database.php";
+        require "modules/database.php";
 
-            echo get_user_session();
+        echo get_user_session();
         ?>
 
         <script>
+            const container = document.getElementById("login-container");
             const sign_up_button = document.getElementById("SignUp");
             const login_button = document.getElementById("Login");
 
@@ -33,14 +34,21 @@
             async function handle_response(response) {
                 const json = await response.json();
                 if (json.error) {
-                    console.log(json.error);
-                    return 
+                    // console.log(json.error);
+                    alert(json.error);
+                    return
                 }
                 const token = json.session_token;
                 // console.log(token);
 
                 document.cookie = `session_token=${token}`
+                window.location.href = "./home"
             }
+
+            function submit(event) {
+                event.preventDefault();
+            }
+            container.onsubmit = submit
 
             login_button.onclick = async () => {
                 const response = await fetch("api/login", {
@@ -65,7 +73,7 @@
             }
 
         </script>
-    </div>
+    </form>
 </body>
 
 </body>
