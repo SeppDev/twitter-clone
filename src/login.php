@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="styles/basic.css">
     <title>Document</title>
 </head>
 
@@ -18,6 +17,11 @@
         <button type="submit" id="SignUp">Sign Up</button>
         <button id="Login">Login</button>
 
+        <?php
+            require "modules/database.php";
+
+            echo get_user_session();
+        ?>
 
         <script>
             const sign_up_button = document.getElementById("SignUp");
@@ -27,7 +31,15 @@
             const password = document.getElementById("password");
 
             async function handle_response(response) {
-                console.log(response.body);
+                const json = await response.json();
+                if (json.error) {
+                    console.log(json.error);
+                    return 
+                }
+                const token = json.session_token;
+                // console.log(token);
+
+                document.cookie = `session_token=${token}`
             }
 
             login_button.onclick = async () => {
