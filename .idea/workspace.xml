@@ -53,6 +53,7 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+<<<<<<< Updated upstream
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "PHP Script.login.php.executor": "Run",
@@ -73,6 +74,28 @@
     ]
   }
 }]]></component>
+=======
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;PHP Script.login.php.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Radwanfa&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mariadb&quot;,
+      &quot;mysql&quot;
+    ]
+  }
+}</component>
+>>>>>>> Stashed changes
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -93,9 +116,13 @@
       <workItem from="1727870551617" duration="8842000" />
       <workItem from="1727887629128" duration="1632000" />
       <workItem from="1727889468143" duration="108000" />
+<<<<<<< Updated upstream
       <workItem from="1727889630063" duration="664000" />
       <workItem from="1727891063080" duration="25000" />
       <workItem from="1727937436046" duration="6510000" />
+=======
+      <workItem from="1727889630063" duration="380000" />
+>>>>>>> Stashed changes
     </task>
     <task id="LOCAL-00001" summary="stfu">
       <option name="closed" value="true" />
@@ -145,6 +172,7 @@
       <option name="project" value="LOCAL" />
       <updated>1727889149571</updated>
     </task>
+<<<<<<< Updated upstream
     <task id="LOCAL-00007" summary="EEEEUGH">
       <option name="closed" value="true" />
       <created>1727944115049</created>
@@ -154,6 +182,9 @@
       <updated>1727944115049</updated>
     </task>
     <option name="localTasksCounter" value="8" />
+=======
+    <option name="localTasksCounter" value="7" />
+>>>>>>> Stashed changes
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
