@@ -21,8 +21,18 @@ function build_error(string $message)
 }
 
 
+function sanitize_username(string $username): string {
+    $new = filter_var($username, FILTER_SANITIZE_SPECIAL_CHARS);
+    if ($new == $username) {
+        return $username;
+    }
+    build_error("Special characters aren't allowed!");
+}
+
 function create_user(string $username, string $password)
 {
+
+    $username = sanitize_username($username);
     if (strlen($username) > 20) {
         build_error("Username is too long!");
     }
@@ -54,6 +64,7 @@ function create_user(string $username, string $password)
 
 function login_user(string $username, string $password)
 {
+    $username = sanitize_username($username);
     $password_hash = hash("sha256", $password);
     $connection = $GLOBALS["database"];
 
@@ -61,24 +72,16 @@ function login_user(string $username, string $password)
     $query->bind_param("s", $username);
     $query->execute();
 
-    $query->free_result();
-    $result = $query->get_result();
-    if (!$result) {
-        build_error("No result found");
+    $query->bind_result($id, $password);
+    if (!$query->fetch()) {
+        build_error("No user found");
     }
-
-    $user = $query->fetch();
-    if (!$user) {
-        build_error("User not found");
-    }
-
-    $id = $user[0];
-    $password = $user[1];
 
     if ($password != $password_hash) {
         build_error("Wrong password");
     }
 
+    $query->close();
     die(json_encode(array(
         "session_token" => create_user_session($id)
     )));
