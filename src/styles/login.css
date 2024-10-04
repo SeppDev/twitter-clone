@@ -1,0 +1,135 @@
+
+
+:root {
+    --light-blue: rgb(231, 233, 234);
+}
+
+.container {
+    max-width: 800px;
+    height: 100%
+}
+
+#logo {
+    max-width: 60%;
+    color: var(--light-blue)
+}
+
+#main {
+    height: calc(100% - 100px);
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+}
+
+#containers {
+    max-height: 600px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+#logins {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 300px;
+}
+
+#social-logins-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    width: 100%;
+}
+
+#logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+}
+
+#login-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+}
+
+.social-login {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    height: 2.5rem;
+    box-shadow: 0px 0px 0px 1px rgb(85, 85, 85);
+}
+
+.social-login>p {
+    margin: 1rem;
+    color: black;
+    font-size: 0.8rem;
+    text-align: center;
+    font-weight: lighter
+}
+
+.input-field {
+    height: 34px;
+    width: 100%;
+    border-radius: 8px;
+    background-color: rgb(40, 40, 40);
+    outline: none;
+    border: none;
+    padding: 4px;
+}
+
+#or {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+#or>hr {
+    height: 0px;
+    width: 100%;
+    color: rgb(41, 41, 41);
+}
+
+#or>span {
+    padding-right: 10px;
+    padding-left: 10px;
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: var(--light-blue);
+}
+
+#create-account {
+    color: white;
+    background-color: rgb(29, 155, 240);
+    transition-duration: 200ms;
+}
+
+#create-account:hover {
+    background-color: rgb(26, 140, 216);
+}
+
+#terms {
+    font-size: 0.6rem;
+    color: rgb(95, 95, 95);
+    font-weight: lighter;
+}
+
+#sign-in {
+    box-shadow: 0px 0px 1px 1px rgb(83, 100, 113);
+    background-color: rgba(0,0,0,1);
+    color: var(--main-color);
+    font-size: 0.8rem;
+    font-weight: 400;
+    transition-duration: 200ms;
+}
+#sign-in:hover {
+    background-color: rgba(29,155,240, 0.1);
+}
