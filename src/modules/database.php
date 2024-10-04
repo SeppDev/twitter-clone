@@ -20,15 +20,9 @@ function build_error(string $message)
     )));
 }
 
-function sanitize_username(string $username): string
-{
-    return $username;
-    // return $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
-}
 
 function create_user(string $username, string $password)
 {
-    $username = sanitize_username($username);
     if (strlen($username) > 20) {
         build_error("Username is too long!");
     }
@@ -43,10 +37,15 @@ function create_user(string $username, string $password)
     $password_hash = hash("sha256", $password);
     $connection = $GLOBALS["database"];
 
-    $sql = sprintf("INSERT INTO `users`(`id`, `username`, `password`, `reg_date`, `profile_img`) VALUES (NULL, \"%s\", \"%s\", NULL, \"LINK\")", $username, $password_hash);
+    // $sql = sprintf("INSERT INTO `users`(`id`, `username`, `password`, `reg_date`, `profile_img`) VALUES (NULL, :username, \"%s\", NULL, \"LINK\")", $username, $password_hash);
+    $query = $connection->prepare("INSERT INTO `users`(`id`, `username`, `password`, `reg_date`, `profile_img`) VALUES (NULL, ?, ?, NULL, ?)");
+
+    $link = "https://static.vecteezy.com/system/resources/previews/022/461/234/large_2x/cute-tiny-cat-ai-generative-image-for-mobile-wallpaper-free-photo.jpg";
+
+    $query->bind_param("sss", $username, $password_hash, $link);
 
     try {
-        $connection->query($sql);
+        $query->execute();
         login_user($username, $password);
     } catch (mysqli_sql_exception $e) {
         build_error($e->getMessage());
@@ -55,14 +54,20 @@ function create_user(string $username, string $password)
 
 function login_user(string $username, string $password)
 {
-    $username = sanitize_username($username);
     $password_hash = hash("sha256", $password);
     $connection = $GLOBALS["database"];
 
-    $sql = sprintf("SELECT `id`, `password` FROM `users` WHERE username LIKE '%s'", $username);
-    $result = $connection->query($sql);
+    $query = $connection->prepare("SELECT `id`, `password` FROM `users` WHERE username LIKE (?)");
+    $query->bind_param("s", $username);
+    $query->execute();
 
-    $user = $result->fetch_row();
+    $query->free_result();
+    $result = $query->get_result();
+    if (!$result) {
+        build_error("No result found");
+    }
+
+    $user = $query->fetch();
     if (!$user) {
         build_error("User not found");
     }

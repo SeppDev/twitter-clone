@@ -18,7 +18,7 @@ require "modules/database.php";
     <script>
         const logout = document.getElementById("logout");
         logout.onclick = async () => {
-            const responnse = await fetch("api/logout", {
+            const response = await fetch("api/logout", {
                 method: "POST",
             })
             document.cookie = "session_token="
@@ -33,7 +33,6 @@ require "modules/database.php";
             header("Location: ./login");
             die();
         } 
-        echo $user->token;
         loadPosts();
         ?>
 
