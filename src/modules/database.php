@@ -79,6 +79,7 @@ function create_user_session(int $userid): string
 
 class User
 {
+    public int $id;
     public string $username;
     public string $profile_image;
     public string $reg_date;
@@ -103,7 +104,7 @@ function get_user_session(): User|null
     }
     $id = $token[0];
 
-    $sql = sprintf("SELECT `username`, `reg_date`, `profile_img` FROM `users` WHERE id LIKE %d", $id);
+    $sql = sprintf("SELECT `id`, `username`, `reg_date`, `profile_img` FROM `users` WHERE id LIKE %d", $id);
     $result = $connection->query($sql);
 
     $user = $result->fetch_row();
@@ -112,9 +113,10 @@ function get_user_session(): User|null
     }
 
     $object = new User();
-    $object->username = $user[0];
-    $object->reg_date = $user[1];
-    $object->profile_image = $user[2];
+    $object->id = $user[0];
+    $object->username = $user[1];
+    $object->reg_date = $user[2];
+    $object->profile_image = $user[3];
 
     return $object;
 }
