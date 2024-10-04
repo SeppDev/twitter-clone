@@ -1,11 +1,10 @@
 .wrapper {
     justify-content: center;
     margin: 0 auto;
-    height: 100%;
+    min-height: 600px;
     width: 50%;
     background: white;
     padding: 30px;
-
 }
 
 body {
@@ -47,4 +46,10 @@ body {
 }
 img {
     border-radius: 50px;
+}
+
+.dialog {
+    border: 2px solid black;
+    display: block;
+    z-index: 99;
 }
