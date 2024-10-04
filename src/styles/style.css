@@ -50,6 +50,4 @@ img {
 
 .dialog {
     border: 2px solid black;
-    display: block;
-    z-index: 99;
 }

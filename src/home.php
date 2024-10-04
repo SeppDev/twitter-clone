@@ -26,6 +26,7 @@ require "modules/database.php";
     <script>
         const logout = document.getElementById("logout");
         const createTweet = document.getElementById("createTweet");
+        const dialog = document.getElementsByClassName("dialog");
         logout.onclick = async () => {
             const response = await fetch("api/logout", {
                 method: "POST",
@@ -33,7 +34,7 @@ require "modules/database.php";
             document.cookie = "session_token="
             window.location.reload();
         }
-        createTweet.onclick =
+        createTweet.onclick = dialog.open = true;
     </script>
     <div class="wrapper">
     
