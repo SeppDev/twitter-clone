@@ -11,6 +11,20 @@ require "modules/database.php";
 </head>
 
 <body>
+    <button id="logout">
+        logout
+    </button>
+
+    <script>
+        const logout = document.getElementById("logout");
+        logout.onclick = async () => {
+            const responnse = await fetch("api/logout", {
+                method: "POST",
+            })
+            document.cookie = "session_token="
+            window.location.reload();
+        }
+    </script>
     <div class="wrapper">
     
     <?php
@@ -19,7 +33,7 @@ require "modules/database.php";
             header("Location: ./login");
             die();
         } 
-        echo $user->username;
+        echo $user->token;
         loadPosts();
         ?>
 

@@ -13,8 +13,6 @@ if ($GLOBALS["database"]->connect_error) {
     exit();
 }
 
-// $GLOBALS["database"]->query("CREATE TABLE `twitter_clone`.`sessions` (`token` CHAR(32) NOT NULL , `id` INT(11) NOT NULL , PRIMARY KEY (`token`)) ENGINE = InnoDB; ");
-
 function build_error(string $message)
 {
     die(json_encode(array(
@@ -22,11 +20,24 @@ function build_error(string $message)
     )));
 }
 
+function sanitize_username(string $username): string
+{
+    return $username;
+    // return $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
+}
+
 function create_user(string $username, string $password)
 {
-
+    $username = sanitize_username($username);
     if (strlen($username) > 20) {
         build_error("Username is too long!");
+    }
+
+    $username = isset($username) ? $username : null;
+    $password = isset($password) ? $password : null;
+
+    if (!($username && $password)) {
+        build_error("Failed to provide a username or password");
     }
 
     $password_hash = hash("sha256", $password);
@@ -44,6 +55,7 @@ function create_user(string $username, string $password)
 
 function login_user(string $username, string $password)
 {
+    $username = sanitize_username($username);
     $password_hash = hash("sha256", $password);
     $connection = $GLOBALS["database"];
 
@@ -77,8 +89,16 @@ function create_user_session(int $userid): string
     return $token;
 }
 
+function logout_user(string $token)
+{
+    $connection = $GLOBALS["database"];
+    $sql = sprintf("DELETE FROM `sessions` WHERE `sessions`.`token` = '%s'", $token);
+    $connection->query($sql);
+}
+
 class User
 {
+    public string $token;
     public int $id;
     public string $username;
     public string $profile_image;
@@ -89,20 +109,20 @@ class User
 function get_user_session(): User|null
 {
     $connection = $GLOBALS["database"];
-    
+
     $token = isset($_COOKIE["session_token"]) ? $_COOKIE["session_token"] : null;
     if (empty($token)) {
         return null;
     }
-    
+
     $sql = sprintf("SELECT `id` FROM `sessions` WHERE token LIKE '%s'", $token);
     $result = $connection->query($sql);
-    
-    $token = $result->fetch_row();
-    if (empty($token)) {
+
+    $row = $result->fetch_row();
+    if (empty($row)) {
         return null;
     }
-    $id = $token[0];
+    $id = $row[0];
 
     $sql = sprintf("SELECT `id`, `username`, `reg_date`, `profile_img` FROM `users` WHERE id LIKE %d", $id);
     $result = $connection->query($sql);
@@ -113,6 +133,7 @@ function get_user_session(): User|null
     }
 
     $object = new User();
+    $object->token = $token;
     $object->id = $user[0];
     $object->username = $user[1];
     $object->reg_date = $user[2];
