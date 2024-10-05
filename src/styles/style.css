@@ -51,3 +51,8 @@ img {
 .dialog {
     border: 2px solid black;
 }
+
+.tweetC {
+    display: flex;
+    flex-direction: column;
+}
