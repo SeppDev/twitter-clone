@@ -142,32 +142,50 @@ function get_user_session(): User|null
     return $object;
 }
 
-function sql($expression)
-{
-    $query = $GLOBALS["database"]->query($expression);
-    return $query->fetch_all(PDO::FETCH_ASSOC);
-}
-function post()
-{
-    return sql("SELECT * FROM posts");
-}
-function author($result)
-{
-    return sql("SELECT * FROM users WHERE id LIKE " . $result['author']);
-}
-
-function loadPosts()
-{
-    $result = post();
-    foreach ($result as $post) {
-        $result1 = author($post);
-        echo "<div class=\"tweet\">
+class tweet {
+    private $id;
+    private $content;
+    function __construct($content, $id) {
+        $this->content = $content;
+        $this->id = $id;
+    }
+    private function sql($expression)
+    {
+        $query = $GLOBALS["database"]->query($expression);
+        return $query->fetch_all(PDO::FETCH_ASSOC);
+    }
+    private function posts()
+    {
+        return $this->sql("SELECT * FROM posts");
+    }
+    public function post(): void
+    {
+        $this->sql(sprintf("INSERT INTO `posts` (`content`, `author`) VALUES ('%s', %d)", $this->content, $this->id));
+    }
+    private function author($result)
+    {
+        return $this->sql("SELECT * FROM users WHERE id LIKE " . $result[1]);
+    }
+    public function loadPosts(): void
+    {
+        $result = $this->posts();
+        foreach ($result as $post) {
+            $result1 = $this->author($post);
+            echo "<div class=\"tweet\">
     <div class=\"profile\">
-        <div class=\"pfp\"><img src=" . $result1[0]['profile_img'] . " width=\"60px\" height=\"60px\" alt=\"\"></div>
-        <div class=\"name\">" . $result1[0]['username'] . "</div>
+        <div class=\"pfp\"><img src=" . $result1[0][4] . " width=\"60px\" height=\"60px\" alt=\"\"></div>
+        <div class=\"name\">" . $result1[0][1] . "</div>
     </div>
-    <div class=\"\content\">" . $post['content'] . "
+    <div class=\"\content\">" . $post[2] . "
     </div>
     </div>";
+        }
     }
 }
+
+
+
+
+
+
+

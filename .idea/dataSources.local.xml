@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal" created-in="PS-242.21829.154">
-<<<<<<< Updated upstream
-    <data-source name="@localhost" uuid="39645d42-990e-4680-bf64-4006aadc2883">
-=======
-    <data-source name="@localhost [3]" uuid="5bd09a05-56b9-4627-9518-8b04be276247">
->>>>>>> Stashed changes
+    <data-source name="@localhost" uuid="361d35f8-f4ba-4926-9a60-871547b5ecd7">
       <database-info product="MariaDB" version="10.4.32-MariaDB" jdbc-version="4.2" driver-name="MariaDB Connector/J" driver-version="3.3.3" dbms="MARIADB" exact-version="10.4.32" exact-driver-version="3.3">
         <extra-name-characters>#@</extra-name-characters>
         <identifier-quote-string>`</identifier-quote-string>
@@ -15,10 +11,7 @@
       <user-name>root</user-name>
       <schema-mapping>
         <introspection-scope>
-          <node kind="schema">
-            <name qname="@" />
-            <name qname="twitter_clone" />
-          </node>
+          <node kind="schema" qname="twitter_clone" />
         </introspection-scope>
       </schema-mapping>
     </data-source>
