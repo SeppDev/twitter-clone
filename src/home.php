@@ -33,7 +33,7 @@ require "modules/database.php";
             header("Location: ./login");
             die();
         } 
-        loadPosts();
+        // loadPosts();
         ?>
 
     </div>

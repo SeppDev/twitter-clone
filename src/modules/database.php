@@ -1,17 +1,10 @@
 <?php
-$host = "localhost";
-
-$username = "root";
-$password = "";
-
-
-$GLOBALS["database"] = new mysqli($host, $username);
-$GLOBALS["database"]->select_db("twitter_clone");
-
-if ($GLOBALS["database"]->connect_error) {
-    echo "Failed to connect";
-    exit();
+try {
+    $GLOBALS["database"] = new PDO("mysql:host=localhost;dbname=twitter_clone","root", "");
+} catch (Exception $e) {
+    die("Error: " . $e->getMessage());
 }
+
 
 function build_error(string $message)
 {
@@ -52,12 +45,15 @@ function create_user(string $username, string $password)
 
     $link = "https://static.vecteezy.com/system/resources/previews/022/461/234/large_2x/cute-tiny-cat-ai-generative-image-for-mobile-wallpaper-free-photo.jpg";
 
-    $query->bind_param("sss", $username, $password_hash, $link);
+    // $query->bindParam("sss", $username, $password_hash, $link);
+    $query->bindParam(1, $username, PDO::PARAM_STR);
+    $query->bindParam(2, $password_hash, PDO::PARAM_STR);
+    $query->bindParam(3, $link, PDO::PARAM_STR);
 
     try {
         $query->execute();
         login_user($username, $password);
-    } catch (mysqli_sql_exception $e) {
+    } catch (PDOException $e) {
         build_error($e->getMessage());
     }
 }
@@ -69,21 +65,29 @@ function login_user(string $username, string $password)
     $connection = $GLOBALS["database"];
 
     $query = $connection->prepare("SELECT `id`, `password` FROM `users` WHERE username LIKE (?)");
-    $query->bind_param("s", $username);
-    $query->execute();
+    $query->bindParam(1, $username, PDO::PARAM_STR);
 
-    $query->bind_result($id, $password);
-    if (!$query->fetch()) {
+    try {
+        $query->execute();
+    } catch (PDOException $e) {
+        build_error($e->getMessage());
+    }
+
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    if (empty($result)) {
         build_error("No user found");
     }
 
-    if ($password != $password_hash) {
+    $found_id = $result["id"];
+    $found_password = $result["password"];
+
+    if ($found_password != $password_hash) {
         build_error("Wrong password");
     }
 
-    $query->close();
+    $query->closeCursor();
     die(json_encode(array(
-        "session_token" => create_user_session($id)
+        "session_token" => create_user_session($found_id)
     )));
 }
 
@@ -91,8 +95,12 @@ function create_user_session(int $userid): string
 {
     $token = substr(base64_encode(random_bytes(50)), 0, 32);
     $connection = $GLOBALS["database"];
-    $sql = sprintf("INSERT INTO `sessions` (`token`, `id`) VALUES ('%s', %d)", $token, $userid);
-    $connection->query($sql);
+    // $sql = sprintf("INSERT INTO `sessions` (`token`, `id`) VALUES ('%s', %d)", $token, $userid);
+    $query = $connection->prepare("INSERT INTO `sessions` (`token`, `id`) VALUES (?, ?)");
+    $query->bindParam(1, $token, PDO::PARAM_STR);
+    $query->bindParam(2, $userid, PDO::PARAM_INT);
+
+    $query->execute();
 
     return $token;
 }
@@ -123,29 +131,32 @@ function get_user_session(): User|null
         return null;
     }
 
-    $sql = sprintf("SELECT `id` FROM `sessions` WHERE token LIKE '%s'", $token);
-    $result = $connection->query($sql);
-
-    $row = $result->fetch_row();
+    $query =  $connection->prepare("SELECT `id` FROM `sessions` WHERE token LIKE ?");
+    $query->bindParam(1, $token, PDO::PARAM_STR);
+    $result = $query->execute();
+    if ($result === false) {
+        return null;
+    }
+    
+    $row = $query->fetch(PDO::FETCH_ASSOC);
     if (empty($row)) {
         return null;
     }
-    $id = $row[0];
 
-    $sql = sprintf("SELECT `id`, `username`, `reg_date`, `profile_img` FROM `users` WHERE id LIKE %d", $id);
-    $result = $connection->query($sql);
+    $query = $connection->prepare("SELECT `id`, `username`, `reg_date`, `profile_img` FROM `users` WHERE id LIKE ?");
+    $query->bindParam(1, $row["id"], PDO::PARAM_INT);
 
-    $user = $result->fetch_row();
-    if (!$user) {
+    $row = $query->fetch(PDO::FETCH_ASSOC);
+    if (empty($row)) {
         return null;
     }
 
     $object = new User();
     $object->token = $token;
-    $object->id = $user[0];
-    $object->username = $user[1];
-    $object->reg_date = $user[2];
-    $object->profile_image = $user[3];
+    $object->id = $row["id"];
+    $object->username = $row["username"];
+    $object->reg_date = $row["reg_date"];
+    $object->profile_image = $row["profile_img"];
 
     return $object;
 }
