@@ -1,6 +1,6 @@
 <?php
 try {
-    $GLOBALS["database"] = new PDO("mysql:host=localhost;dbname=twitter_clone","root", "");
+    $GLOBALS["database"] = new PDO("mysql:host=localhost;dbname=twitter_clone", "root", "");
 } catch (Exception $e) {
     die("Error: " . $e->getMessage());
 }
@@ -14,7 +14,8 @@ function build_error(string $message)
 }
 
 
-function sanitize_username(string $username): string {
+function sanitize_username(string $username): string
+{
     $new = filter_var($username, FILTER_SANITIZE_SPECIAL_CHARS);
     if ($new == $username) {
         return $username;
@@ -95,7 +96,6 @@ function create_user_session(int $userid): string
 {
     $token = substr(base64_encode(random_bytes(50)), 0, 32);
     $connection = $GLOBALS["database"];
-    // $sql = sprintf("INSERT INTO `sessions` (`token`, `id`) VALUES ('%s', %d)", $token, $userid);
     $query = $connection->prepare("INSERT INTO `sessions` (`token`, `id`) VALUES (?, ?)");
     $query->bindParam(1, $token, PDO::PARAM_STR);
     $query->bindParam(2, $userid, PDO::PARAM_INT);
@@ -108,8 +108,13 @@ function create_user_session(int $userid): string
 function logout_user(string $token)
 {
     $connection = $GLOBALS["database"];
-    $sql = sprintf("DELETE FROM `sessions` WHERE `sessions`.`token` = '%s'", $token);
-    $connection->query($sql);
+    $query = $connection->prepare("DELETE FROM `sessions` WHERE `token` = ?");
+    $query->bindParam(1, $token, PDO::PARAM_STR);
+    try {
+        $query->execute();
+    } catch (PDOException $e) {
+        build_error($e->getMessage());
+    }
 }
 
 class User
@@ -131,13 +136,13 @@ function get_user_session(): User|null
         return null;
     }
 
-    $query =  $connection->prepare("SELECT `id` FROM `sessions` WHERE token LIKE ?");
+    $query = $connection->prepare("SELECT `id` FROM `sessions` WHERE token LIKE ?");
     $query->bindParam(1, $token, PDO::PARAM_STR);
     $result = $query->execute();
     if ($result === false) {
         return null;
     }
-    
+
     $row = $query->fetch(PDO::FETCH_ASSOC);
     if (empty($row)) {
         return null;
