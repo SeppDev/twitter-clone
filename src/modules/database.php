@@ -130,6 +130,9 @@ function get_user_session(): User|null
     $query = $connection->prepare("SELECT `id` FROM `sessions` WHERE token LIKE ?");
     $query->bindParam(1, $token, PDO::PARAM_STR);
     $result = $query->execute();
+    if ($result === false) {
+        return null;
+    }
 
 
     $row = $query->fetch(PDO::FETCH_ASSOC);
@@ -140,6 +143,7 @@ function get_user_session(): User|null
 
     $query = $connection->prepare("SELECT `id`, `username`, `reg_date`, `profile_img` FROM `users` WHERE id LIKE ?");
     $query->bindParam(1, $row['id'], PDO::PARAM_STR);
+    $query->execute();
 
 
     $user = $query->fetch(PDO::FETCH_ASSOC);
@@ -149,10 +153,10 @@ function get_user_session(): User|null
 
     $object = new User();
     $object->token = $token;
-    $object->id = $user[0];
-    $object->username = $user[1];
-    $object->reg_date = $user[2];
-    $object->profile_image = $user[3];
+    $object->id = $user['id'];
+    $object->username = $user['username'];
+    $object->reg_date = $user['reg_date'];
+    $object->profile_image = $user['profile_img'];
 
     return $object;
 }
@@ -178,19 +182,23 @@ class tweet {
         $query->bindParam(1, $this->content, PDO::PARAM_STR);
         $query->bindParam(2, $this->id, PDO::PARAM_STR);
         $query->execute();
+        $load = $this->loadPosts();
+        die(json_encode(array(
+            "posts" => $load
+        )));
     }
     private function author($result)
     {
         $connection = $GLOBALS["database"];
         $query = $connection->prepare("SELECT * FROM users WHERE id LIKE ?");
-        $query->bindParam(1, $result[1], PDO::PARAM_STR);
+        $query->bindParam(1, $result['author'], PDO::PARAM_STR);
         $query->execute();
         return $query->fetch(PDO::FETCH_ASSOC);
     }
     public function loadPosts(): array
     {
-        $result = $this->posts();
         $i = 0;
+        $result = $this->posts();
         foreach ($result as $post) {
             $result1 = $this->author($post);
             $responses[$i] = sprintf("<div class=\"tweet\">
@@ -200,19 +208,9 @@ class tweet {
     </div>
     <div class=\"\content\">%s
     </div>
-    </div>", $result1[0][4], $result1[0][1], $post[2]);
+    </div>", $result1['profile_img'], $result1['username'], $post['content']);
             $i++;
         }
-        json_encode(array(
-            "tweets" => $responses
-        ));
         return $responses;
     }
 }
-
-
-
-
-
-
-
