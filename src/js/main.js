@@ -3,7 +3,6 @@ let dialog = document.getElementById("dialog");
 let Submit = document.getElementById("submit");
 let content = document.getElementById("content");
 let wrapper = document.getElementById("wrapper");
-let createTweet = document.getElementById("createTweet")
 console.log(wrapper);
 logout.onclick = async () => {
     const response = await fetch("api/logout", {

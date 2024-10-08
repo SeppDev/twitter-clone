@@ -199,6 +199,10 @@ class tweet {
     {
         $i = 0;
         $result = $this->posts();
+        if (!$result) {
+            echo "no posts";
+            die();
+        }
         foreach ($result as $post) {
             $result1 = $this->author($post);
             $responses[$i] = sprintf("<div class=\"tweet\">
