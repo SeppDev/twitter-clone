@@ -31,6 +31,7 @@ require "modules/database.php";
         let dialog = document.getElementById("dialog");
         let Submit = document.getElementById("submit");
         let content = document.getElementById("content");
+        let wrapper = document.getElementById("wrapper");
         logout.onclick = async () => {
             const response = await fetch("api/logout", {
                 method: "POST",
@@ -52,10 +53,18 @@ require "modules/database.php";
                     content: content.value
                 }
             });
-            dialog.open = false
+            dialog.open = false;
+            await handle_response(response);
+        }
+        async function handle_response(response) {
+            let json = await response.json();
+            const posts = json.tweets;
+            for (let i = 0; i < posts.length; i++) {
+                wrapper.innerHTML += posts[i];
+            }
         }
     </script>
-    <div class="wrapper">
+    <div id="wrapper">
     
     <?php
         $user = get_user_session();
@@ -65,7 +74,10 @@ require "modules/database.php";
         }
         $object1 = get_user_session();
         $object = new tweet("", $object1->id);
-        $object->loadPosts();
+        $posts = $object->loadPosts();
+        for ($i = 0; $i < count($posts); $i++) {
+            echo $posts[$i];
+        }
         ?>
 
     </div>
