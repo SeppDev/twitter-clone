@@ -145,6 +145,7 @@ function get_user_session(): User|null
 
     $query = $connection->prepare("SELECT `id`, `username`, `reg_date`, `profile_img` FROM `users` WHERE id LIKE ?");
     $query->bindParam(1, $row["id"], PDO::PARAM_INT);
+    $query->execute();
 
     $row = $query->fetch(PDO::FETCH_ASSOC);
     if (empty($row)) {
