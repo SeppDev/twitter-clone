@@ -191,7 +191,7 @@ class tweet {
     {
         $connection = $GLOBALS["database"];
         $query = $connection->prepare("SELECT * FROM users WHERE id LIKE ?");
-        $query->bindParam(1, $result['author'], PDO::PARAM_STR);
+        $query->bindParam(1, $result['author'], PDO::PARAM_INT);
         $query->execute();
         return $query->fetch(PDO::FETCH_ASSOC);
     }
@@ -204,7 +204,7 @@ class tweet {
             die();
         }
         foreach ($result as $post) {
-            $result1 = $this->author($post);
+            $author = $this->author($post);
             $responses[$i] = sprintf("<div class=\"tweet\">
     <div class=\"profile\">
         <div class=\"pfp\"><img src=\"%s\" width=\"60px\" height=\"60px\" alt=\"\"></div>
@@ -212,7 +212,7 @@ class tweet {
     </div>
     <div class=\"\content\">%s
     </div>
-    </div>", $result1['profile_img'], $result1['username'], $post['content']);
+    </div>", $author['profile_img'], $author['username'], $post['content']);
             $i++;
         }
         return $responses;
