@@ -1,4 +1,4 @@
-.wrapper {
+#wrapper {
     justify-content: center;
     margin: 0 auto;
     min-height: 600px;
@@ -50,6 +50,9 @@ img {
 
 .dialog {
     border: 2px solid black;
-    display: block;
-    z-index: 99;
+}
+
+.tweetC {
+    display: flex;
+    flex-direction: column;
 }
