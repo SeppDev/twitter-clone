@@ -8,6 +8,6 @@ $password = isset($headers['Password']) ? $headers['Password'] : null;
 
 if (!($username && $password)) {
     build_error("Failed to provide a username or password");
-}
+} 
 
-login_user($username, $password);
+loginUser($username, $password);

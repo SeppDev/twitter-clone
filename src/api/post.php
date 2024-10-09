@@ -3,7 +3,7 @@ require "../modules/database.php";
 $headers = getallheaders();
 
 $content = isset($headers['content']) ? $headers['content'] : null;
-$object = get_user_session();
+$object = getUserSession();
 if (!$content) {
     echo "ERROR";
 }

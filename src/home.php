@@ -30,17 +30,14 @@ require "modules/database.php";
     <div id="wrapper">
     
     <?php
-        $user = get_user_session();
+        $user = getUserSession();
         if (!$user) {
             header("Location: ./login");
             die();
         }
-        $object1 = get_user_session();
+        $object1 = getUserSession();
         $object = new tweet("", $object1->id);
-        $posts = $object->loadPosts();
-        for ($i = 0; $i < count($posts); $i++) {
-            echo $posts[$i];
-        }
+        $object->loadPosts();
         ?>
     </div>
     <script>

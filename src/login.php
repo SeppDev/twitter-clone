@@ -1,6 +1,6 @@
 <?php
 require "modules/database.php";
-$user = get_user_session();
+$user = getUserSession();
 if ($user) {
     header("Location: ./home");
     die();
