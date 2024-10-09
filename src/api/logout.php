@@ -1,5 +1,5 @@
 <?php
 require "../modules/database.php";
 
-$user = get_user_session();
+$user = getUserSession();
 logout_user($user->token);
