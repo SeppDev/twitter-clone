@@ -1,7 +1,7 @@
 <?php
 
 try {
-    $GLOBALS["database"] = new PDO("mysql:host=localhost;dbname=twitter_clone","root", "");
+    $GLOBALS["database"] = new PDO("mysql:host=localhost;dbname=twitter_clone", "root", "");
 } catch (Exception $e) {
     die("Error: " . $e->getMessage());
 }
@@ -19,7 +19,7 @@ function sanitize_username(string $username): string
     // return $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
 }
 
-function create_user(string $username, string $password)
+function createUser(string $username, string $password)
 {
     $username = sanitize_username($username);
     if (strlen($username) > 20) {
@@ -45,13 +45,13 @@ function create_user(string $username, string $password)
     $query->bindParam(3, $link, PDO::PARAM_STR);
     try {
         $query->execute();
-        login_user($username, $password);
+        loginUser($username, $password);
     } catch (PDOException $e) {
         build_error($e->getMessage());
     }
 }
 
-function login_user(string $username, string $password)
+function loginUser(string $username, string $password)
 {
     $username = sanitize_username($username);
     $password_hash = hash("sha256", $password);
@@ -80,11 +80,11 @@ function login_user(string $username, string $password)
 
     $query->closeCursor();
     die(json_encode(array(
-        "session_token" => create_user_session($found_id)
+        "session_token" => createUserSession($found_id)
     )));
 }
 
-function create_user_session(int $userid): string
+function createUserSession(int $userid): string
 {
     $token = substr(base64_encode(random_bytes(50)), 0, 32);
     $connection = $GLOBALS["database"];
@@ -96,7 +96,7 @@ function create_user_session(int $userid): string
     return $token;
 }
 
-function logout_user(string $token)
+function logoutUser(string $token)
 {
     $connection = $GLOBALS["database"];
     $query = $connection->prepare("DELETE FROM `sessions` WHERE `sessions`.`token` = ?");
@@ -110,7 +110,6 @@ function logout_user(string $token)
 
 class User
 {
-    public string $token;
     public int $id;
     public string $username;
     public string $profile_image;
@@ -118,7 +117,27 @@ class User
 
 }
 
-function get_user_session(): User|null
+function getUserById(int $id): User|null {
+    $connection = $GLOBALS["database"];
+    $query = $connection->prepare("SELECT `id`, `username`, `reg_date`, `profile_img` FROM `users` WHERE id LIKE (?)");
+    $query->bindParam(1, $id, PDO::PARAM_INT);
+    $query->execute();
+
+    $user = $query->fetch(PDO::FETCH_ASSOC);
+    if (!$user) {
+        return null;
+    }
+
+    $object = new User();
+    $object->id = $user['id'];
+    $object->username = $user['username'];
+    $object->reg_date = $user['reg_date'];
+    $object->profile_image = $user['profile_img'];
+
+    return $object;
+}
+
+function getUserSession(): User|null
 {
     $connection = $GLOBALS["database"];
 
@@ -139,34 +158,18 @@ function get_user_session(): User|null
     if (empty($row)) {
         return null;
     }
-    $id = $row['id'];
 
-    $query = $connection->prepare("SELECT `id`, `username`, `reg_date`, `profile_img` FROM `users` WHERE id LIKE ?");
-    $query->bindParam(1, $row['id'], PDO::PARAM_STR);
-    $query->execute();
-
-
-    $user = $query->fetch(PDO::FETCH_ASSOC);
-    if (!$user) {
-        return null;
-    }
-
-    $object = new User();
-    $object->token = $token;
-    $object->id = $user['id'];
-    $object->username = $user['username'];
-    $object->reg_date = $user['reg_date'];
-    $object->profile_image = $user['profile_img'];
-
-    return $object;
+    return getUserById($row["id"]);
 }
 
-class tweet {
-    private $id;
-    private $content;
-    function __construct($content, $id) {
+class tweet
+{
+    private int $authorId;
+    private string $content;
+    function __construct($content, $id)
+    {
         $this->content = $content;
-        $this->id = $id;
+        $this->authorId = $id;
     }
     private function posts()
     {
@@ -180,12 +183,14 @@ class tweet {
         $connection = $GLOBALS["database"];
         $query = $connection->prepare("INSERT INTO `posts` (`content`, `author`) VALUES (?, ?)");
         $query->bindParam(1, $this->content, PDO::PARAM_STR);
-        $query->bindParam(2, $this->id, PDO::PARAM_STR);
+        $query->bindParam(2, $this->authorId, PDO::PARAM_INT);
         $query->execute();
-        $load = $this->loadPosts();
-        die(json_encode(array(
-            "posts" => $load
-        )));
+
+        $user = getUserById($this->authorId);
+
+        $component = file_get_contents("../components/tweet.html");
+        echo buildTweet($component, $user->profile_image, $user->username, $this->content);
+        die();
     }
     private function author($result)
     {
@@ -195,26 +200,27 @@ class tweet {
         $query->execute();
         return $query->fetch(PDO::FETCH_ASSOC);
     }
-    public function loadPosts(): array
+    public function loadAllPosts()
     {
-        $i = 0;
         $result = $this->posts();
         if (!$result) {
             echo "no posts";
-            die();
         }
+
+        $component = file_get_contents("components/tweet.html");
+
         foreach ($result as $post) {
             $author = $this->author($post);
-            $responses[$i] = sprintf("<div class=\"tweet\">
-    <div class=\"profile\">
-        <div class=\"pfp\"><img src=\"%s\" width=\"60px\" height=\"60px\" alt=\"\"></div>
-        <div class=\"name\">%s</div>
-    </div>
-    <div class=\"\content\">%s
-    </div>
-    </div>", $author['profile_img'], $author['username'], $post['content']);
-            $i++;
+
+            $profile_image = $author["profile_img"];
+            $username = $author["username"];
+            $content = $post["content"];
+
+            echo buildTweet($component, $profile_image, $username, $content);
         }
-        return $responses;
     }
+}
+
+function buildTweet(string $component, string $profile_image, string $username, string $content) {
+    return sprintf($component, $profile_image, $username, $content);
 }

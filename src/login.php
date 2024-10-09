@@ -1,6 +1,6 @@
 <?php
 require "modules/database.php";
-$user = get_user_session();
+$user = getUserSession();
 if ($user) {
     header("Location: ./home");
     die();
@@ -22,7 +22,7 @@ if ($user) {
 
         <div id="containers">
             <div id="logo-container" class="container">
-                <img id="logo" src="https://freelogopng.com/images/all_img/1690643777twitter-x%20logo-png-white.png">
+                <img id="logo" src="https://logos-world.net/wp-content/uploads/2020/04/Twitter-Logo.png">
             </div>
             <div id="login-container" class="container">
                 <h1 style="font-size: 3.7rem; font-weight: 700">Happening now</h1>

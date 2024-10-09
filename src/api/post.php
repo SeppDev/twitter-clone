@@ -3,10 +3,11 @@ require "../modules/database.php";
 $headers = getallheaders();
 
 $content = isset($headers['content']) ? $headers['content'] : null;
-$object = get_user_session();
+$user = getUserSession();
+
 if (!$content) {
-    echo "ERROR";
+    build_error("No content");
 }
-$object1 = new tweet($content, $object->id);
-$object1->post();
-$object1->loadPosts();
+
+$tweet = new tweet($content, $user->id);
+$tweet->post();
