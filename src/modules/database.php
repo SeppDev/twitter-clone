@@ -186,6 +186,8 @@ class tweet
         $query->bindParam(2, $this->authorId, PDO::PARAM_INT);
         $query->execute();
 
+        $postId = $connection->lastInsertId();
+        
         $user = getUserById($this->authorId);
 
         $component = file_get_contents("../components/tweet.html");
@@ -221,6 +223,6 @@ class tweet
     }
 }
 
-function buildTweet(string $component, string $profile_image, string $username, string $content) {
-    return sprintf($component, $profile_image, $username, $content);
+function buildTweet(string $component, string $profile_image, string $username, string $content, int $postId) {
+    return sprintf($component, $profile_image, $username, $content, $postId, $postId);
 }
