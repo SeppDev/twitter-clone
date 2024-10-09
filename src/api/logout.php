@@ -2,4 +2,8 @@
 require "../modules/database.php";
 
 $user = getUserSession();
-logout_user($user->token);
+if (!$user) {
+    build_error("Not logged in");
+}
+
+// logout_user($user->token);

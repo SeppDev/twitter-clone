@@ -5,6 +5,10 @@ $headers = getallheaders();
 $content = isset($headers['content']) ? $headers['content'] : null;
 $user = getUserSession();
 
+if (!$user) {
+    build_error("Not logged in");
+}
+
 if (!$content) {
     build_error("No content");
 }

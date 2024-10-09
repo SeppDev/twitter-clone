@@ -162,14 +162,42 @@ function getUserSession(): User|null
     return getUserById($row["id"]);
 }
 
+function like(int $postId, User $user): bool {
+    $connection = $GLOBALS["database"];
+    $query = $connection->prepare("SELECT * FROM `likes` WHERE author LIKE ? AND link LIKE ?");
+    $query->bindParam(1, $user->id, PDO::PARAM_INT);
+    $query->bindParam(2, $postId, PDO::PARAM_INT);
+    $query->execute();
+
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+
+    if ($result) {
+        $query = $connection->prepare("DELETE FROM `likes` WHERE (`author`) LIKE ? AND link LIKE ? ");
+        $query->bindParam(1, $user->id, PDO::PARAM_INT);
+        $query->bindParam(2, $postId, PDO::PARAM_INT);
+        $query->execute();
+        $result = false;    
+    } else {
+        $query = $connection->prepare("INSERT INTO `likes` (`author`, `link`) VALUES (?, ?)");
+        $query->bindParam(1, $user->id, PDO::PARAM_INT);
+        $query->bindParam(2, $postId, PDO::PARAM_INT);
+        $query->execute();
+        $result = true;
+    }
+
+    die(json_encode(array(
+        "result" => $result,
+    )));
+}
+
 class tweet
 {
     private int $authorId;
     private string $content;
-    function __construct($content, $id)
+    function __construct($content, $authorId)
     {
         $this->content = $content;
-        $this->authorId = $id;
+        $this->authorId = $authorId;
     }
     private function posts()
     {
@@ -191,7 +219,7 @@ class tweet
         $user = getUserById($this->authorId);
 
         $component = file_get_contents("../components/tweet.html");
-        echo buildTweet($component, $user->profile_image, $user->username, $this->content);
+        echo buildTweet($component, $user->profile_image, $user->username, $this->content, $postId);
         die();
     }
     private function author($result)
@@ -217,12 +245,13 @@ class tweet
             $profile_image = $author["profile_img"];
             $username = $author["username"];
             $content = $post["content"];
+            $id = $post["id"];
 
-            echo buildTweet($component, $profile_image, $username, $content);
+            echo buildTweet($component, $profile_image, $username, $content, $id);
         }
     }
 }
 
 function buildTweet(string $component, string $profile_image, string $username, string $content, int $postId) {
-    return sprintf($component, $profile_image, $username, $content, $postId, $postId);
+    return sprintf($component, $profile_image, $username, $content, $postId);
 }

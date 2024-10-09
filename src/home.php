@@ -71,6 +71,7 @@ require "modules/database.php";
             }
             container.onsubmit = submit
             Submit.onclick = async () => {
+                Submit.innerText = "Positing...";
                 const response = await fetch("api/post", {
                     method: "POST",
                     headers: {
@@ -79,12 +80,29 @@ require "modules/database.php";
                 });
                 dialog.open = false;
                 await handle_response(response);
+                Submit.innerText = "Post";
             }
             async function handle_response(response) {
                 const content = await response.text();
                 const element = createElementFromHTML(content);
                 wrapper.appendChild(element);
 
+            }
+
+            async function like(postId) {
+                const response = await fetch("api/like", {
+                    method: "POST",
+                    headers: {
+                        postId: postId
+                    }
+                })
+                const json = await response.json()
+                if (json.error) {
+                    console.log(json.error);
+                    return
+                }
+                const result = json.result;
+                alert(result);
             }
         </script>
     </div>
