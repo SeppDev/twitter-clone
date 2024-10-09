@@ -14,9 +14,18 @@ require "modules/database.php";
     <button id="logout">
         logout
     </button>
+    <button id="createTweet">
+        Create tweet
+    </button>
+    <dialog class="dialog">
+        <form class="tweetC">
+
+        </form>
+    </dialog>
 
     <script>
         const logout = document.getElementById("logout");
+        const createTweet = document.getElementById("createTweet");
         logout.onclick = async () => {
             const response = await fetch("api/logout", {
                 method: "POST",
@@ -24,6 +33,7 @@ require "modules/database.php";
             document.cookie = "session_token="
             window.location.reload();
         }
+        createTweet.onclick =
     </script>
     <div class="wrapper">
     
@@ -32,8 +42,8 @@ require "modules/database.php";
         if (!$user) {
             header("Location: ./login");
             die();
-        } 
-        // loadPosts();
+        }
+        loadPosts();
         ?>
 
     </div>
