@@ -58,6 +58,10 @@ require "modules/database.php";
                 const response = await fetch("api/logout", {
                     method: "POST",
                 })
+                if (response.error) {
+                    alert(response.error)
+                    return;
+                }
                 document.cookie = "session_token=";
                 window.location.reload();
             }

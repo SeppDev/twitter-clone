@@ -99,7 +99,7 @@ function createUserSession(int $userid): string
 function logoutUser(string $token)
 {
     $connection = $GLOBALS["database"];
-    $query = $connection->prepare("DELETE FROM `sessions` WHERE `sessions`.`token` = ?");
+    $query = $connection->prepare("DELETE FROM `sessions` WHERE `sessions`.`token` LIKE ?");
     $query->bindParam(1, $token, PDO::PARAM_STR);
     try {
         $query->execute();

@@ -1,8 +1,8 @@
 <?php
 require "../modules/database.php";
 
-$user = getUserSessionToken();
-if (!$user) {
+$token = getUserSessionToken();
+if (!$token) {
     build_error("Not logged in");
 }
 
