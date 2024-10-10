@@ -138,15 +138,8 @@ function getUserById(int $id): User|null
     return $object;
 }
 
-function getUserSession(): User|null
-{
+function verifySessionToken(string $token): int|null {
     $connection = $GLOBALS["database"];
-
-    $token = isset($_COOKIE["session_token"]) ? $_COOKIE["session_token"] : null;
-    if (empty($token)) {
-        return null;
-    }
-
     $query = $connection->prepare("SELECT `id` FROM `sessions` WHERE token LIKE ?");
     $query->bindParam(1, $token, PDO::PARAM_STR);
     $result = $query->execute();
@@ -154,13 +147,41 @@ function getUserSession(): User|null
         return null;
     }
 
-
     $row = $query->fetch(PDO::FETCH_ASSOC);
     if (empty($row)) {
         return null;
     }
 
-    return getUserById($row["id"]);
+    return $row["id"];
+}
+
+function getUserSessionToken(): string|null {
+    $token = isset($_COOKIE["session_token"]) ? $_COOKIE["session_token"] : null;
+    if (empty($token)) {
+        return null;
+    }
+
+    $id = verifySessionToken($token);
+    if (empty($id)) {
+        return null;
+    }
+
+    return $token;
+}
+
+function getUserSession(): User|null
+{
+    $token = getUserSessionToken();
+    if (empty($token)) {
+        return null;
+    }
+
+    $id = verifySessionToken($token);
+    if (empty($id)) {
+        return null;
+    }
+
+    return getUserById($id);
 }
 
 function likeStatus(int $postId, int $userId): bool
@@ -185,8 +206,8 @@ function postLikes(int $postId): int {
     $query->bindParam(1, $postId, PDO::PARAM_INT);
     $query->execute();
 
-    $result = $query->fetchAll(PDO::FETCH_ASSOC);
-    return $result[0]["COUNT(*)"];
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    return $result["COUNT(*)"];
 }
 
 function like(int $postId, User $user): bool
