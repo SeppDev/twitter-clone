@@ -26,7 +26,6 @@ require "modules/database.php";
             </form>
         </dialog>
 
-
         <div id="wrapper">
 
             <?php
@@ -89,7 +88,8 @@ require "modules/database.php";
 
             }
 
-            async function like(postId) {
+            
+            async function likePost(element, postId) {
                 const response = await fetch("api/like", {
                     method: "POST",
                     headers: {
@@ -102,7 +102,12 @@ require "modules/database.php";
                     return
                 }
                 const result = json.result;
-                alert(result);
+                checkLikeStatus(element, json.result == true);
+            }
+
+            function checkLikeStatus(element, status) {
+                // console.log(element, status);
+                element.innerText = status;
             }
         </script>
     </div>

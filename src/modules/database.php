@@ -117,7 +117,8 @@ class User
 
 }
 
-function getUserById(int $id): User|null {
+function getUserById(int $id): User|null
+{
     $connection = $GLOBALS["database"];
     $query = $connection->prepare("SELECT `id`, `username`, `reg_date`, `profile_img` FROM `users` WHERE id LIKE (?)");
     $query->bindParam(1, $id, PDO::PARAM_INT);
@@ -162,21 +163,33 @@ function getUserSession(): User|null
     return getUserById($row["id"]);
 }
 
-function like(int $postId, User $user): bool {
+function likeStatus(int $postId, int $userId): bool
+{
     $connection = $GLOBALS["database"];
     $query = $connection->prepare("SELECT * FROM `likes` WHERE author LIKE ? AND link LIKE ?");
-    $query->bindParam(1, $user->id, PDO::PARAM_INT);
+    $query->bindParam(1, $userId, PDO::PARAM_INT);
     $query->bindParam(2, $postId, PDO::PARAM_INT);
     $query->execute();
 
     $result = $query->fetch(PDO::FETCH_ASSOC);
 
     if ($result) {
+        return true;
+    }
+    return false;
+}
+
+function like(int $postId, User $user): bool
+{
+    $connection = $GLOBALS["database"];
+    $result = likeStatus($postId, $user->id);
+
+    if ($result) {
         $query = $connection->prepare("DELETE FROM `likes` WHERE (`author`) LIKE ? AND link LIKE ? ");
         $query->bindParam(1, $user->id, PDO::PARAM_INT);
         $query->bindParam(2, $postId, PDO::PARAM_INT);
         $query->execute();
-        $result = false;    
+        $result = false;
     } else {
         $query = $connection->prepare("INSERT INTO `likes` (`author`, `link`) VALUES (?, ?)");
         $query->bindParam(1, $user->id, PDO::PARAM_INT);
@@ -215,11 +228,12 @@ class tweet
         $query->execute();
 
         $postId = $connection->lastInsertId();
-        
+
         $user = getUserById($this->authorId);
+        $likeStatus = likeStatus($postId, $this->authorId);
 
         $component = file_get_contents("../components/tweet.html");
-        echo buildTweet($component, $user->profile_image, $user->username, $this->content, $postId);
+        echo buildTweet($component, $user->profile_image, $user->username, $this->content, $postId, $likeStatus);
         die();
     }
     private function author($result)
@@ -246,12 +260,22 @@ class tweet
             $username = $author["username"];
             $content = $post["content"];
             $id = $post["id"];
+            $likeStatus = likeStatus($id, $this->authorId);
 
-            echo buildTweet($component, $profile_image, $username, $content, $id);
+            echo buildTweet($component, $profile_image, $username, $content, $id, $likeStatus);
         }
     }
 }
 
-function buildTweet(string $component, string $profile_image, string $username, string $content, int $postId) {
-    return sprintf($component, $profile_image, $username, $content, $postId);
+function buildTweet(string $component, string $profile_image, string $username, string $content, int $postId, bool $status)
+{
+    
+    return sprintf($component, $profile_image, $username, $content, boolToText($status), $postId, $postId, $postId);
+}
+
+function boolToText(bool $bool) {
+    if ($bool) {
+        return "true";
+    }
+    return "false";
 }
