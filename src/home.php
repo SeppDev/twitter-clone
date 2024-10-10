@@ -89,7 +89,7 @@ require "modules/database.php";
             }
 
             
-            async function likePost(element, postId) {
+            async function likePost(button, postId) {
                 const response = await fetch("api/like", {
                     method: "POST",
                     headers: {
@@ -101,13 +101,12 @@ require "modules/database.php";
                     console.log(json.error);
                     return
                 }
-                const result = json.result;
-                checkLikeStatus(element, json.result == true);
+                
+                checkLikeStatus(button, json.result == true);
             }
 
-            function checkLikeStatus(element, status) {
-                // console.log(element, status);
-                element.innerText = status;
+            function checkLikeStatus(button, status) {
+                button.innerText = status;
             }
         </script>
     </div>

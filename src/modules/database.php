@@ -179,6 +179,16 @@ function likeStatus(int $postId, int $userId): bool
     return false;
 }
 
+function postLikes(int $postId): int {
+    $connection = $GLOBALS["database"];
+    $query = $connection->prepare("SELECT COUNT(*) FROM `likes` WHERE link LIKE ?");
+    $query->bindParam(1, $postId, PDO::PARAM_INT);
+    $query->execute();
+
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+    return $result[0]["COUNT(*)"];
+}
+
 function like(int $postId, User $user): bool
 {
     $connection = $GLOBALS["database"];
@@ -262,6 +272,7 @@ class tweet
             $id = $post["id"];
             $likeStatus = likeStatus($id, $this->authorId);
 
+            echo postLikes($id);
             echo buildTweet($component, $profile_image, $username, $content, $id, $likeStatus);
         }
     }
@@ -269,7 +280,6 @@ class tweet
 
 function buildTweet(string $component, string $profile_image, string $username, string $content, int $postId, bool $status)
 {
-    
     return sprintf($component, $profile_image, $username, $content, boolToText($status), $postId, $postId, $postId);
 }
 
