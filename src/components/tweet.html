@@ -1,15 +1,15 @@
 <div class="tweet">
     <div class="profile">
-        <div class="pfp"><img src="%s" width="60px" height="60px" alt="profiel_foto"></div>
-        <div class="name">%s</div>
+        <div class="pfp"><img src="{{profile_image}}" width="60px" height="60px" alt="ProfilePicture"></div>
+        <div class="name">{{username}}</div>
     </div>
-    <div class="content">%s</div>
-    <button status="%s" id="like_%s" onclick="likePost(this, '%s')">
+    <div class="content">{{content}}</div>
+    <button status="{{like_status}}" id="like_{{post_id}}" onclick="likePost(this, '{{post_id}}')">
         like
     </button>
     <script>
         {
-            const element = document.getElementById("like_%s");
+            const element = document.getElementById("like_{{post_id}}");
             const status = element.getAttribute("status") === "true";
             
             setTimeout(() => {

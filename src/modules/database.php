@@ -301,7 +301,13 @@ class tweet
 
 function buildTweet(string $component, string $profile_image, string $username, string $content, int $postId, bool $status)
 {
-    return sprintf($component, $profile_image, $username, $content, boolToText($status), $postId, $postId, $postId);
+    $component = str_replace("{{profile_image}}", $profile_image, $component);
+    $component = str_replace("{{username}}", $username, $component);
+    $component = str_replace("{{content}}", $content, $component);
+    $component = str_replace("{{post_id}}", $postId, $component);
+    $component = str_replace("{{like_status}}", boolToText($status), $component);
+    
+    return $component;
 }
 
 function boolToText(bool $bool) {
