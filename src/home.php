@@ -26,7 +26,6 @@ require "modules/database.php";
             </form>
         </dialog>
 
-
         <div id="wrapper">
 
             <?php
@@ -59,6 +58,10 @@ require "modules/database.php";
                 const response = await fetch("api/logout", {
                     method: "POST",
                 })
+                if (response.error) {
+                    alert(response.error)
+                    return;
+                }
                 document.cookie = "session_token=";
                 window.location.reload();
             }
@@ -71,6 +74,7 @@ require "modules/database.php";
             }
             container.onsubmit = submit
             Submit.onclick = async () => {
+                Submit.innerText = "Positing...";
                 const response = await fetch("api/post", {
                     method: "POST",
                     headers: {
@@ -79,12 +83,34 @@ require "modules/database.php";
                 });
                 dialog.open = false;
                 await handle_response(response);
+                Submit.innerText = "Post";
             }
             async function handle_response(response) {
                 const content = await response.text();
                 const element = createElementFromHTML(content);
                 wrapper.appendChild(element);
 
+            }
+
+            
+            async function likePost(button, postId) {
+                const response = await fetch("api/like", {
+                    method: "POST",
+                    headers: {
+                        postId: postId
+                    }
+                })
+                const json = await response.json()
+                if (json.error) {
+                    console.log(json.error);
+                    return
+                }
+                
+                checkLikeStatus(button, json.result == true);
+            }
+
+            function checkLikeStatus(button, status) {
+                button.innerText = status;
             }
         </script>
     </div>

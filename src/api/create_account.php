@@ -10,4 +10,4 @@ if (!($username && $password)) {
     build_error("Failed to provide a username or password");
 }
 
-create_user($username, $password);
+createUser($username, $password);
