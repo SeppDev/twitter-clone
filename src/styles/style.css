@@ -56,3 +56,24 @@ img {
     display: flex;
     flex-direction: column;
 }
+
+.like {
+    display: flex;
+    flex-direction: row;
+}
+.count {
+    margin: 0 20px;
+    padding: 12px;
+}
+.likeButton {
+    background: white;
+    margin: 2px;
+}
+.flex {
+    display: flex;
+    flex-direction: row;
+}
+.cross {
+    position: relative;
+    left: 100px;
+}

@@ -1,16 +1,21 @@
 <div class="tweet">
     <div class="profile">
-        <div class="pfp"><img src="%s" width="60px" height="60px" alt="profiel_foto"></div>
-        <div class="name">%s</div>
+        <div class="pfp"><img src="{{profile_image}}" width="60px" height="60px" alt="profiel_foto"></div>
+        <div class="name">{{username}}</div>
     </div>
-    <div class="content">%s</div>
-    <button status="%s" id="like_%s" onclick="likePost(this, '%s')">
+    <div class="content">{{content}}
+    <img src="api/get_image?file={{image}}"></div>
+    <div class="like">
+    <button status="{{like_status}}" id="like_{{post_id}}" class="likeButton" onclick="likePost(this, '{{post_id}}')">
         like
     </button>
+    <div class="count" id="count_{{post_id}}">{{like_count}}</div>
+    </div>
     <script>
         {
-            const element = document.getElementById("like_%s");
+            const element = document.getElementById("like_{{post_id}}");
             const status = element.getAttribute("status") === "true";
+
             
             setTimeout(() => {
                 checkLikeStatus(element, status);
