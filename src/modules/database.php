@@ -254,7 +254,7 @@ class tweet
     private function posts()
     {
         $connection = $GLOBALS["database"];
-        $query = $connection->prepare("SELECT * FROM posts");
+        $query = $connection->prepare("SELECT * FROM posts ORDER BY id DESC");
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
