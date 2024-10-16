@@ -1,0 +1,19 @@
+Index: src/components/tweet.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><div class=\"tweet\">\r\n    <div class=\"profile\">\r\n        <div class=\"pfp\"><img src=\"{{profile_image}}\" width=\"60px\" height=\"60px\" alt=\"profiel_foto\"></div>\r\n        <div class=\"name\">{{username}}</div>\r\n    </div>\r\n    <div class=\"content\">{{content}}\r\n    <img src=\"api/get_image?file={{image}}\"></div>\r\n    <div class=\"like\">\r\n    <button status=\"{{like_status}}\" id=\"like_{{post_id}}\" class=\"likeButton\" onclick=\"likePost(this, '{{post_id}}')\">\r\n        like\r\n    </button>\r\n    <div class=\"count\" id=\"count_{{post_id}}\">{{like_count}}</div>\r\n    </div>\r\n    <script>\r\n        {\r\n            const element = document.getElementById(\"like_{{post_id}}\");\r\n            const status = element.getAttribute(\"status\") === \"true\";\r\n\r\n            \r\n            setTimeout(() => {\r\n                checkLikeStatus(element, status);\r\n            }, 1);\r\n        }\r\n    </script>\r\n</div>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/components/tweet.html b/src/components/tweet.html
+--- a/src/components/tweet.html	(revision bf93ac9b47bcda6962b925a6488fbe243e13a470)
++++ b/src/components/tweet.html	(date 1729067271521)
+@@ -4,7 +4,7 @@
+         <div class="name">{{username}}</div>
+     </div>
+     <div class="content">{{content}}
+-    <img src="api/get_image?file={{image}}"></div>
++    <img src="api/get_image?file={{image}}" style="max-width: 120px; max-height: 120px"></div>
+     <div class="like">
+     <button status="{{like_status}}" id="like_{{post_id}}" class="likeButton" onclick="likePost(this, '{{post_id}}')">
+         like
