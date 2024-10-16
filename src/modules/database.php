@@ -268,13 +268,13 @@ class tweet
         $query->bindParam(1, $this->content, PDO::PARAM_STR);
         $query->bindParam(2, $this->authorId, PDO::PARAM_INT);
 
-        $file =  $_FILES['file'];
-
-        if (isset($file)) {
-            $fileTmpPath =  $file['tmp_name'];
-            $fileName = $_FILES['file']['name'];
+        if (isset($_FILES["file"])) {
+            $fileTmpPath =  $_FILES["file"]['tmp_name'];
             $fileData = file_get_contents($fileTmpPath);
             $query->bindParam(3, $fileData, PDO::PARAM_STR);
+        } else {
+            $value = null;
+            $query->bindParam(3, $value);
         }
         $query->execute();
 
@@ -336,29 +336,6 @@ function boolToText(bool $bool)
     }
     return "false";
 }
-
-
-class Imagery
-{
-    private string $imageName;
-    private string $imageData;
-
-    function __construct(string $imageName, string $imageData)
-    {
-        $this->imageName = $imageName;
-        $this->imageData = $imageData;
-    }
-
-    // public function postImage(): void
-    // {
-    //     $connection = $GLOBALS["database"];
-    //     $query = $connection->prepare("INSERT INTO `images` (`image_name`, `data`) VALUES (?, ?)");
-    //     $query->bindParam(1, $this->imageName, PDO::PARAM_STR);
-    //     $query->bindParam(2, $this->imageData, PDO::PARAM_LOB);
-    //     $query->execute();
-    // }
-}
-
 function getImage(int $postId)
 {
     $connection = $GLOBALS["database"];

@@ -28,7 +28,9 @@ require "modules/database.php";
                 </div>
                 <label for="content"></label><input type="text" class="input-field1" id="content">
                 <div>image url</div>
-                <label for="content2"></label> <input type="file" class="input-field2" id="imageURL">
+                <label for="content2"></label> 
+                <input type="file" accept="image/*" class="input-field2" id="fileInput">
+                <button id="clearFileInput">clear</button>
                 <button id="submit">submit</button>
             </form>
         </dialog>
@@ -59,8 +61,11 @@ require "modules/database.php";
             const dialog = document.getElementById("dialog");
             const Submit = document.getElementById("submit");
             const content = document.getElementById("content");
+
+            const fileInput = document.getElementById("fileInput");
+            const clearFileInput = document.getElementById("clearFileInput");
+
             let wrapper = document.getElementById("wrapper");
-            const imageUrl = document.getElementById("imageURL");
 
             function closeDialog() {
                 dialog.open = false;
@@ -85,12 +90,16 @@ require "modules/database.php";
                 event.preventDefault();
             }
             container.onsubmit = submit
+
+            clearFileInput.onclick = () => {
+                fileInput.value = null;
+            }
+
             Submit.onclick = async () => {
                 Submit.innerText = "Positing...";
                 let formData = new FormData();
-                formData.append("file", imageUrl.files[0]);
+                formData.append("file", fileInput.files[0]);
                 formData.append("content", content.value);
-                console.log(formData);
                 const response = await fetch("api/post", {
                     method: "POST",
                     body: formData
