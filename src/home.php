@@ -19,9 +19,16 @@ require "modules/database.php";
             Create tweet
         </button>
         <dialog id="dialog">
-            <form class="tweetC">
-                content
+            <form class="tweetC" method="POST">
+                <div class="flex">
+                    <div>content</div>
+                    <a onclick="closeDialog()" href="">
+                        <img src="images/free-cross-icon-3203-thumb.png" width="18px" height="20px" class="cross">
+                    </a>
+                </div>
                 <label for="content"></label><input type="text" class="input-field1" id="content">
+                <div>image url</div>
+                <label for="content2"></label> <input type="file" class="input-field2" id="imageURL">
                 <button id="submit">submit</button>
             </form>
         </dialog>
@@ -52,7 +59,12 @@ require "modules/database.php";
             const dialog = document.getElementById("dialog");
             const Submit = document.getElementById("submit");
             const content = document.getElementById("content");
-            const wrapper = document.getElementById("wrapper");
+            let wrapper = document.getElementById("wrapper");
+            const imageUrl = document.getElementById("imageURL");
+
+            function closeDialog() {
+                dialog.open = false;
+            }
 
             logout.onclick = async () => {
                 const response = await fetch("api/logout", {
@@ -75,11 +87,13 @@ require "modules/database.php";
             container.onsubmit = submit
             Submit.onclick = async () => {
                 Submit.innerText = "Positing...";
+                let formData = new FormData();
+                formData.append("file", imageUrl.files[0]);
+                formData.append("content", content.value);
+                console.log(formData);
                 const response = await fetch("api/post", {
                     method: "POST",
-                    headers: {
-                        content: content.value
-                    }
+                    body: formData
                 });
                 dialog.open = false;
                 await handle_response(response);
@@ -89,7 +103,6 @@ require "modules/database.php";
                 const content = await response.text();
                 const element = createElementFromHTML(content);
                 wrapper.appendChild(element);
-
             }
 
             
@@ -105,12 +118,16 @@ require "modules/database.php";
                     console.log(json.error);
                     return
                 }
-                
                 checkLikeStatus(button, json.result == true);
+                document.getElementById(`count_${postId}`).innerHTML = json.count;
             }
 
             function checkLikeStatus(button, status) {
-                button.innerText = status;
+                if (!status) {
+                    button.style.backgroundColor = "white";
+                } else {
+                    button.style.backgroundColor = "red";
+                }
             }
         </script>
     </div>
