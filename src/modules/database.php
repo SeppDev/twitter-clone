@@ -84,9 +84,13 @@ function loginUser(string $username, string $password)
     )));
 }
 
+function randomString(int $length) {
+    return substr(base64_encode(random_bytes($length + 10)), 0, $length);
+}
+
 function createUserSession(int $userid): string
 {
-    $token = substr(base64_encode(random_bytes(50)), 0, 32);
+    $token = randomString(32);
     $connection = $GLOBALS["database"];
     $query = $connection->prepare("INSERT INTO `sessions` (`token`, `id`) VALUES (?, ?)");
     $query->bindParam(1, $token, PDO::PARAM_STR);
@@ -138,7 +142,8 @@ function getUserById(int $id): User|null
     return $object;
 }
 
-function verifySessionToken(string $token): int|null {
+function verifySessionToken(string $token): int|null
+{
     $connection = $GLOBALS["database"];
     $query = $connection->prepare("SELECT `id` FROM `sessions` WHERE token LIKE ?");
     $query->bindParam(1, $token, PDO::PARAM_STR);
@@ -155,7 +160,8 @@ function verifySessionToken(string $token): int|null {
     return $row["id"];
 }
 
-function getUserSessionToken(): string|null {
+function getUserSessionToken(): string|null
+{
     $token = isset($_COOKIE["session_token"]) ? $_COOKIE["session_token"] : null;
     if (empty($token)) {
         return null;
@@ -200,7 +206,8 @@ function likeStatus(int $postId, int $userId): bool
     return false;
 }
 
-function postLikes(int $postId): int {
+function postLikes(int $postId): int
+{
     $connection = $GLOBALS["database"];
     $query = $connection->prepare("SELECT COUNT(*) FROM `likes` WHERE link LIKE ?");
     $query->bindParam(1, $postId, PDO::PARAM_INT);
@@ -253,24 +260,32 @@ class tweet
     }
     public function post(): void
     {
-            $connection = $GLOBALS["database"];
-            $query = $connection->prepare("SELECT * FROM `images` ORDER BY id DESC LIMIT 1");
-            $query->execute();
-            $result = $query->fetch(PDO::FETCH_ASSOC);
-            $query = $connection->prepare("INSERT INTO `posts` (`content`, `author`, `image`) VALUES (?, ?, ?)");
-            $query->bindParam(1, $this->content, PDO::PARAM_STR);
-            $query->bindParam(2, $this->authorId, PDO::PARAM_INT);
-            $query->bindParam(3, $result['id'], PDO::PARAM_INT);
-            $query->execute();
+        $connection = $GLOBALS["database"];
+        // $query = $connection->prepare("SELECT * FROM `images` ORDER BY id DESC LIMIT 1");
+        // $query->execute();
+        // $result = $query->fetch(PDO::FETCH_ASSOC);
+        $query = $connection->prepare("INSERT INTO `posts` (`content`, `author`, `image`) VALUES (?, ?, ?)");
+        $query->bindParam(1, $this->content, PDO::PARAM_STR);
+        $query->bindParam(2, $this->authorId, PDO::PARAM_INT);
 
-            $postId = $connection->lastInsertId();
+        $file =  $_FILES['file'];
 
-            $user = getUserById($this->authorId);
-            $likeStatus = likeStatus($postId, $this->authorId);
+        if (isset($file)) {
+            $fileTmpPath =  $file['tmp_name'];
+            $fileName = $_FILES['file']['name'];
+            $fileData = file_get_contents($fileTmpPath);
+            $query->bindParam(3, $fileData, PDO::PARAM_STR);
+        }
+        $query->execute();
 
-            $component = file_get_contents("../components/tweet.html");
-            echo buildTweet($component, $user->profile_image, $user->username, $this->content, $postId, $likeStatus, postLikes($postId), $result['id']);
-            die();
+        $postId = $connection->lastInsertId();
+
+        $user = getUserById($this->authorId);
+        $likeStatus = likeStatus($postId, $this->authorId);
+
+        $component = file_get_contents("../components/tweet.html");
+        echo buildTweet($component, $user->profile_image, $user->username, $this->content, $postId, $likeStatus, postLikes($postId));
+        die();
     }
     private function author($result)
     {
@@ -298,12 +313,12 @@ class tweet
             $id = $post["id"];
             $likeStatus = likeStatus($id, $this->authorId);
             $image = $post["image"];
-            echo buildTweet($component, $profile_image, $username, $content, $id, $likeStatus, postLikes($id), $image);
+            echo buildTweet($component, $profile_image, $username, $content, $id, $likeStatus, postLikes($id));
         }
     }
 }
 
-function buildTweet(string $component, string $profile_image, string $username, string $content, int $postId, bool $status, string $likeCount, int $imageId)
+function buildTweet(string $component, string $profile_image, string $username, string $content, int $postId, bool $status, string $likeCount)
 {
     $component = str_replace("{{profile_image}}", $profile_image, $component);
     $component = str_replace("{{username}}", $username, $component);
@@ -311,11 +326,11 @@ function buildTweet(string $component, string $profile_image, string $username, 
     $component = str_replace("{{post_id}}", $postId, $component);
     $component = str_replace("{{like_count}}", $likeCount, $component);
     $component = str_replace("{{like_status}}", boolToText($status), $component);
-    $component = str_replace("{{image}}", $imageId, $component);
     return $component;
 }
 
-function boolToText(bool $bool) {
+function boolToText(bool $bool)
+{
     if ($bool) {
         return "true";
     }
@@ -323,31 +338,33 @@ function boolToText(bool $bool) {
 }
 
 
-class Imagery {
+class Imagery
+{
     private string $imageName;
     private string $imageData;
 
-    function __construct(string $imageName, string $imageData){
+    function __construct(string $imageName, string $imageData)
+    {
         $this->imageName = $imageName;
         $this->imageData = $imageData;
     }
 
-    public function postImage(): void  {
-        $connection = $GLOBALS["database"];
-        $query = $connection->prepare("INSERT INTO `images` (`image_name`, `data`) VALUES (?, ?)");
-        $query->bindParam(1, $this->imageName, PDO::PARAM_STR);
-        $query->bindParam(2, $this->imageData, PDO::PARAM_LOB);
-        $query->execute();
-    }
+    // public function postImage(): void
+    // {
+    //     $connection = $GLOBALS["database"];
+    //     $query = $connection->prepare("INSERT INTO `images` (`image_name`, `data`) VALUES (?, ?)");
+    //     $query->bindParam(1, $this->imageName, PDO::PARAM_STR);
+    //     $query->bindParam(2, $this->imageData, PDO::PARAM_LOB);
+    //     $query->execute();
+    // }
 }
 
-function getImage($id)
+function getImage(int $postId)
 {
     $connection = $GLOBALS["database"];
-    $query = $connection->prepare("SELECT * FROM `images` where id = ?");
-    $query->bindParam(1, $id, PDO::PARAM_INT);
+    $query = $connection->prepare("SELECT `image` FROM `posts` WHERE id LIKE ?");
+    $query->bindParam(1, $postId, PDO::PARAM_INT);
     $query->execute();
     $result = $query->fetch(PDO::FETCH_ASSOC);
-    return $result['data'];
-    die();
+    return $result['image'];
 }

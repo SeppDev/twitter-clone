@@ -1,6 +1,6 @@
 <?php
 require "../modules/database.php";
 
-$imgId = $_GET["file"];
+$postId = $_GET["file"];
 
-echo getImage($imgId);
+echo getImage($postId);
