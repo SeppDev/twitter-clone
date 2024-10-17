@@ -38,7 +38,8 @@ $user = getUserSession();
             </button>
             <?php
             echo "<div class=\"profile1\">";
-            echo "<img src=" . $user->profile_image . "  width=\"90px\" height=\"90px\">";
+            echo "<img src=" . $user->profile_image . "  width=\"60px\" height=\"60px\" id=\"img1\">";
+            echo "<div class=\"name1\">" . $user->username . "</div>";
             echo "</div>";
             ?>
         </nav>
@@ -48,7 +49,10 @@ $user = getUserSession();
                 <?php
                 $users = getUsers();
                 foreach ($users as $user) {
-
+                    echo "<div id=\"user_" . $user['id'] . "\" class=\"users\">";
+                    echo "<img src=\"" . $user['profile_img'] . "\" width=\"100px\" height=\"100px\">";
+                    echo "<p>" . $user['username'] . "</p>";
+                    echo "</div>";
                 }
                 ?>
             </div>
