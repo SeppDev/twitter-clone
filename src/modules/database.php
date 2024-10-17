@@ -190,6 +190,14 @@ function getUserSession(): User|null
     return getUserById($id);
 }
 
+function editTweet(int $postId, string $content) {
+    $connection = $GLOBALS["database"];
+    $query = $connection->prepare("UPDATE posts SET content=? WHERE id LIKE ?");
+    $query->bindParam(1, $content, PDO::PARAM_STR);
+    $query->bindParam(2, $postId, PDO::PARAM_INT);
+    $query->execute();
+}
+
 function likeStatus(int $postId, int $userId): bool
 {
     $connection = $GLOBALS["database"];
