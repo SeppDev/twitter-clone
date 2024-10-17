@@ -1,14 +1,22 @@
 #wrapper {
     justify-content: center;
-    margin: 0 auto;
-    min-height: 600px;
+    float: right;
+    max-height: 57.5em;
     width: 50%;
-    background: white;
     padding: 30px;
+    overflow: scroll;
+    background: black;
+    border: 3px solid dimgrey;
 }
 
 body {
-    background: aqua;
+    background: black;
+    padding: 0;
+    color: white;
+    height: 100%;
+}
+.container {
+    margin: 0;
     padding: 0;
 }
 
@@ -16,36 +24,45 @@ body {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    border: 3px solid black;
-    border-radius: 50px;
+    width: 100%;
     margin-bottom: 20px;
 }
 
 .content {
     display: flex;
-    padding: 20px;
-    border: 3px solid black;
-    border-radius: 50px;
+    flex-direction: column;
+    border-bottom: 3px solid white;
+    width: 100%;
+    font-size: larger;
 }
-.profile {
+p {
     display: flex;
-    padding: 10px;
-    border: 3px solid black;
-    margin-bottom: 10px;
-    border-radius: 50px;
+    margin: auto auto;
+    font-size: larger;
+}
+
+.profile1 {
+    display: flex;
+    flex-direction: row;
+    float: right;
 }
 
 .name {
     display: flex;
-    padding: 10px;
     justify-content: center;
     align-items: center;
+    margin-left: 130px;
     width: 20%;
+    border-bottom: 2px solid white;
     font-size: 2em;
-    border-radius: 50px;
+    color: white;
+    text-shadow: 4px 4px 10px white;
+    padding: 10px;
 }
 img {
-    border-radius: 50px;
+    display: flex;
+    border-radius: 100px;
+    border: 1px solid white;
 }
 
 .dialog {
@@ -64,10 +81,13 @@ img {
 .count {
     margin: 0 20px;
     padding: 12px;
+    color: white;
 }
 .likeButton {
-    background: white;
     margin: 2px;
+    border: none;
+    display: inline-block;
+    background-color: rgba(0,0,0,1);
 }
 .flex {
     display: flex;
@@ -78,6 +98,35 @@ img {
     left: 100px;
 }
 .image {
-    max-width: 600px;
-    max-height: 600px;
+    max-width: 200px;
+    max-height: 200px;
 }
+
+.aside {
+    border: 3px solid white;
+    display: flex;
+    float: left;
+    width: 46.6%;
+    height: 100vh;
+}
+.wrapper1 {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+}
+.button {
+    border: 2px solid white;
+    margin: 0;
+    padding: 20px;
+    background: black;
+    color: white;
+    font-size: larger;
+}
+.button:hover {
+    background: gray;
+}
+nav{
+    border-bottom: 3px solid white;
+}
+

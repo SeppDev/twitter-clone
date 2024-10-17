@@ -242,6 +242,13 @@ function like(int $postId, User $user): bool
     )));
 }
 
+function getUsers(){
+    $connection = $GLOBALS["database"];
+    $query = $connection->prepare("SELECT * FROM `users`");
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+}
+
 class tweet
 {
     private int $authorId;
@@ -261,9 +268,6 @@ class tweet
     public function post(): void
     {
         $connection = $GLOBALS["database"];
-        // $query = $connection->prepare("SELECT * FROM `images` ORDER BY id DESC LIMIT 1");
-        // $query->execute();
-        // $result = $query->fetch(PDO::FETCH_ASSOC);
         $query = $connection->prepare("INSERT INTO `posts` (`content`, `author`, `image`) VALUES (?, ?, ?)");
         $query->bindParam(1, $this->content, PDO::PARAM_STR);
         $query->bindParam(2, $this->authorId, PDO::PARAM_INT);
@@ -272,9 +276,11 @@ class tweet
             $fileTmpPath =  $_FILES["file"]['tmp_name'];
             $fileData = file_get_contents($fileTmpPath);
             $query->bindParam(3, $fileData, PDO::PARAM_STR);
+            $hasImage = true;
         } else {
             $value = null;
             $query->bindParam(3, $value);
+            $hasImage = false;
         }
         $query->execute();
 
@@ -284,7 +290,7 @@ class tweet
         $likeStatus = likeStatus($postId, $this->authorId);
 
         $component = file_get_contents("../components/tweet.html");
-        echo buildTweet($component, $user->profile_image, $user->username, $this->content, $postId, $likeStatus, postLikes($postId));
+        echo buildTweet($component, $user->profile_image, $user->username, $this->content, $postId, $likeStatus, postLikes($postId), $hasImage);
         die();
     }
     private function author($result)
@@ -312,14 +318,23 @@ class tweet
             $content = $post["content"];
             $id = $post["id"];
             $likeStatus = likeStatus($id, $this->authorId);
-            $image = $post["image"];
-            echo buildTweet($component, $profile_image, $username, $content, $id, $likeStatus, postLikes($id));
+            if (!$post['image']) {
+                $hasImage = false;
+            } else {
+                $hasImage = true;
+            }
+            echo buildTweet($component, $profile_image, $username, $content, $id, $likeStatus, postLikes($id), $hasImage);
         }
     }
 }
 
-function buildTweet(string $component, string $profile_image, string $username, string $content, int $postId, bool $status, string $likeCount)
+function buildTweet(string $component, string $profile_image, string $username, string $content, int $postId, bool $status, string $likeCount, bool $hasImage)
 {
+    if ($hasImage) {
+        $component = str_replace("{{image}}", "<img src=\"api/get_image?file={{post_id}}\" class=\"image\">" , $component);
+    } else {
+        $component = str_replace("{{image}}", "", $component);
+    }
     $component = str_replace("{{profile_image}}", $profile_image, $component);
     $component = str_replace("{{username}}", $username, $component);
     $component = str_replace("{{content}}", $content, $component);

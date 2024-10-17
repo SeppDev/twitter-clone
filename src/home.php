@@ -1,5 +1,6 @@
 <?php
 require "modules/database.php";
+$user = getUserSession();
 ?>
 
 <!DOCTYPE html>
@@ -12,12 +13,6 @@ require "modules/database.php";
 
 <body>
     <div id="container">
-        <button id="logout">
-            logout
-        </button>
-        <button id="createTweet" onclick="tweet()">
-            Create tweet
-        </button>
         <dialog id="dialog">
             <form class="tweetC" method="POST">
                 <div class="flex">
@@ -28,17 +23,39 @@ require "modules/database.php";
                 </div>
                 <label for="content"></label><input type="text" class="input-field1" id="content">
                 <div>image url</div>
-                <label for="content2"></label> 
+                <label for="content2"></label>
                 <input type="file" accept="image/*" class="input-field2" id="fileInput">
                 <button id="clearFileInput">clear</button>
                 <button id="submit">submit</button>
             </form>
         </dialog>
+        <nav>
+            <button id="logout" class="button">
+                logout
+            </button>
+            <button id="createTweet" onclick="tweet()" class="button">
+                Create tweet
+            </button>
+            <?php
+            echo "<div class=\"profile1\">";
+            echo "<img src=" . $user->profile_image . "  width=\"90px\" height=\"90px\">";
+            echo "</div>";
+            ?>
+        </nav>
+        <div id="wrapper1">
+            <div class="aside">
+                <h1>Users</h1>
+                <?php
+                $users = getUsers();
+                foreach ($users as $user) {
+
+                }
+                ?>
+            </div>
 
         <div id="wrapper">
 
             <?php
-            $user = getUserSession();
             if (!$user) {
                 header("Location: ./login");
                 die();
@@ -52,8 +69,6 @@ require "modules/database.php";
             function createElementFromHTML(htmlString) {
                 var div = document.createElement('div');
                 div.innerHTML = htmlString.trim();
-
-                // Change this to div.childNodes to support multiple top-level nodes.
                 return div.firstChild;
             }
 
@@ -132,13 +147,16 @@ require "modules/database.php";
             }
 
             function checkLikeStatus(button, status) {
-                if (!status) {
-                    button.style.backgroundColor = "white";
+                if (status) {
+                    button.style.color = "red"
+                    button.style.fill = "red"
                 } else {
-                    button.style.backgroundColor = "red";
+                    button.style.color = "white"
+                    button.style.fill = "none"
                 }
             }
         </script>
+    </div>
     </div>
 </body>
 
