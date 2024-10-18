@@ -129,6 +129,7 @@ img {
     height: 91vh;
     margin: 10px 0 10px 8vh;
     border-radius: 30px;
+    overflow-y: scroll;
 }
 .wrapper1 {
     display: flex;

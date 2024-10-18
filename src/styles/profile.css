@@ -1,0 +1,96 @@
+#page {
+    display: flex;
+    justify-content: center;
+    /* height: 100vh; */
+    /* margin: 10px; */
+}
+
+#profilepage {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 800px;
+    max-width: 100vw;
+}
+
+#profile {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    background-color: rgb(40,50,60);
+}
+
+#profile-navigation {
+    height: 50px;
+    display: flex;
+    /* padding: 10px; */
+    position: sticky;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+}
+
+#profile-posts {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex-grow: 1;
+    background-color: red;
+}
+
+
+.navigation-button {
+    flex-grow: 1;
+    border-radius: 0px;
+    background-color: rgba(0,0,0,1);
+}
+
+.profile-information {
+    /* padding: 20px; */
+    /* margin: 30px; */
+    width: 100%;
+}
+.profile-information>div {
+    padding: 20px;
+}
+
+.banner {
+    position: relative;
+    width: 100%;
+}
+
+.img-banner {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+#profile-image-container {
+    position: absolute;
+    right: 100px;
+    top: 75px;
+    height: 150px;
+    aspect-ratio: 1;
+    border-radius: 100vh;
+    outline: 4px solid;
+    border: none;
+    outline: none;
+    margin: 0px;
+    padding: 4px;
+}
+
+#profile-image-container:hover > #edit-profile-image {
+    background-color: red;
+}
+
+#edit-profile-image {
+    height: 100%;
+    width: 100%;
+}
+
+.profile-image {
+    height: 100%;
+    border-radius: 100vh;
+}

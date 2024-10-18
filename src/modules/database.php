@@ -1,10 +1,18 @@
 <?php
 
+function readRelativeFile(string $path): string
+{
+    $dir = __DIR__;
+    return file_get_contents("$dir/$path");
+}
+
 try {
     $GLOBALS["database"] = new PDO("mysql:host=localhost;dbname=twitter_clone", "root", "");
 } catch (Exception $e) {
     die("Error: " . $e->getMessage());
 }
+$GLOBALS["component"] = readRelativeFile("../components/tweet.html");
+
 
 function build_error(string $message)
 {
@@ -84,7 +92,8 @@ function loginUser(string $username, string $password)
     )));
 }
 
-function randomString(int $length) {
+function randomString(int $length)
+{
     return substr(base64_encode(random_bytes($length + 10)), 0, $length);
 }
 
@@ -116,7 +125,7 @@ class User
 {
     public int $id;
     public string $username;
-    public string $profile_image;
+    public string|null $profile_image;
     public string $reg_date;
 
 }
@@ -126,6 +135,28 @@ function getUserById(int $id): User|null
     $connection = $GLOBALS["database"];
     $query = $connection->prepare("SELECT `id`, `username`, `reg_date`, `profile_img` FROM `users` WHERE id LIKE (?)");
     $query->bindParam(1, $id, PDO::PARAM_INT);
+    $query->execute();
+
+    $user = $query->fetch(PDO::FETCH_ASSOC);
+    if (!$user) {
+        return null;
+    }
+
+    $object = new User();
+    $object->id = $user['id'];
+    $object->username = $user['username'];
+    $object->reg_date = $user['reg_date'];
+    $object->profile_image = $user['profile_img'];
+
+    return $object;
+}
+
+
+function getUserByName(string $username): User|null
+{
+    $connection = $GLOBALS["database"];
+    $query = $connection->prepare("SELECT `id`, `username`, `reg_date`, `profile_img` FROM `users` WHERE username LIKE (?)");
+    $query->bindParam(1, $username, PDO::PARAM_STR);
     $query->execute();
 
     $user = $query->fetch(PDO::FETCH_ASSOC);
@@ -177,6 +208,10 @@ function getUserSessionToken(): string|null
 
 function getUserSession(): User|null
 {
+    if (isset($GLOBALS["currentUser"])) {
+        return $GLOBALS["currentUser"];
+    }
+
     $token = getUserSessionToken();
     if (empty($token)) {
         return null;
@@ -187,10 +222,13 @@ function getUserSession(): User|null
         return null;
     }
 
-    return getUserById($id);
+    $user = getUserById($id);
+    $GLOBALS["currentUser"] = $user;
+    return $user;
 }
 
-function editTweet(int $postId, string $content) {
+function editTweet(int $postId, string $content)
+{
     $connection = $GLOBALS["database"];
     $query = $connection->prepare("UPDATE posts SET content=? WHERE id LIKE ?");
     $query->bindParam(1, $content, PDO::PARAM_STR);
@@ -250,7 +288,8 @@ function like(int $postId, User $user): bool
     )));
 }
 
-function getUsers(){
+function getUsers()
+{
     $connection = $GLOBALS["database"];
     $query = $connection->prepare("SELECT * FROM `users`");
     $query->execute();
@@ -281,7 +320,7 @@ class tweet
         $query->bindParam(2, $this->authorId, PDO::PARAM_INT);
 
         if (isset($_FILES["file"])) {
-            $fileTmpPath =  $_FILES["file"]['tmp_name'];
+            $fileTmpPath = $_FILES["file"]['tmp_name'];
             $fileData = file_get_contents($fileTmpPath);
             $query->bindParam(3, $fileData, PDO::PARAM_STR);
             $hasImage = true;
@@ -297,53 +336,54 @@ class tweet
         $user = getUserById($this->authorId);
         $likeStatus = likeStatus($postId, $this->authorId);
 
-        $component = file_get_contents("../components/tweet.html");
-        echo buildTweet($component, $user->profile_image, $user->username, $this->content, $postId, $likeStatus, postLikes($postId), $hasImage);
+        echo buildTweet($user->username, $this->content, $postId, $likeStatus, postLikes($postId), $hasImage, $this->authorId);
         die();
-    }
-    private function author($result)
-    {
-        $connection = $GLOBALS["database"];
-        $query = $connection->prepare("SELECT * FROM users WHERE id LIKE ?");
-        $query->bindParam(1, $result['author'], PDO::PARAM_INT);
-        $query->execute();
-        return $query->fetch(PDO::FETCH_ASSOC);
-    }
-    public function loadAllPosts()
-    {
-        $result = $this->posts();
-        if (!$result) {
-            echo "no posts";
-        }
-
-        $component = file_get_contents("components/tweet.html");
-
-        foreach ($result as $post) {
-            $author = $this->author($post);
-
-            $profile_image = $author["profile_img"];
-            $username = $author["username"];
-            $content = $post["content"];
-            $id = $post["id"];
-            $likeStatus = likeStatus($id, $this->authorId);
-            if (!$post['image']) {
-                $hasImage = false;
-            } else {
-                $hasImage = true;
-            }
-            echo buildTweet($component, $profile_image, $username, $content, $id, $likeStatus, postLikes($id), $hasImage);
-        }
     }
 }
 
-function buildTweet(string $component, string $profile_image, string $username, string $content, int $postId, bool $status, string $likeCount, bool $hasImage)
+function fetchTweets(int|null $userid): void
 {
+    $connection = $GLOBALS["database"];
+
+    $query = $connection->prepare("SELECT * FROM `posts`");
+    if (isset($userid)) {
+        $query = $connection->prepare("SELECT * FROM `posts` WHERE id LIKE ?");
+        $query->bindParam(1, $userId, PDO::PARAM_INT);
+    }
+    $query->execute();
+
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($result as $post) {
+        $author = getUserById($post["author"]);
+        $likeStatus = likeStatus($post["id"], $post["author"]);
+        $username = $author->username;
+
+        $content = $post["content"];
+        $id = $post["id"];
+
+        if (!$post['image']) {
+            $hasImage = false;
+        } else {
+            $hasImage = true;
+        }
+
+        echo buildTweet($username, $content, $id, $likeStatus, postLikes($id), $hasImage, $author->id);
+    }
+
+}
+
+function buildTweet(string $username, string $content, int $postId, bool $status, int $likeCount, bool $hasImage, int $authorId): string
+{
+    $component = $GLOBALS["component"];
+
     if ($hasImage) {
-        $component = str_replace("{{image}}", "<img src=\"api/get_image?file={{post_id}}\" class=\"image\">" , $component);
+        $component = str_replace("{{image}}", "<img src=\"api/get_image?file={{post_id}}\" class=\"image\">", $component);
     } else {
         $component = str_replace("{{image}}", "", $component);
     }
-    $component = str_replace("{{profile_image}}", $profile_image, $component);
+
+    $component = str_replace("{{profile_image}}", "api/get_profile_image?userid=$authorId", $component);
+
     $component = str_replace("{{username}}", $username, $component);
     $component = str_replace("{{content}}", $content, $component);
     $component = str_replace("{{post_id}}", $postId, $component);
@@ -359,12 +399,27 @@ function boolToText(bool $bool)
     }
     return "false";
 }
-function getImage(int $postId)
+function getPostImage(int $postId): string|null
 {
     $connection = $GLOBALS["database"];
     $query = $connection->prepare("SELECT `image` FROM `posts` WHERE id LIKE ?");
     $query->bindParam(1, $postId, PDO::PARAM_INT);
     $query->execute();
     $result = $query->fetch(PDO::FETCH_ASSOC);
+    header("Content-Type: image/*");
     return $result['image'];
+}
+
+function getProfileImage(int $userId): string
+{
+    $connection = $GLOBALS["database"];
+    $query = $connection->prepare("SELECT `profile_img` FROM `users` WHERE id LIKE ?");
+    $query->bindParam(1, $userId, PDO::PARAM_INT);
+    $query->execute();
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    header("Content-Type: image/*");
+    if (isset($result['profile_img'])) {
+        return $result["profile_img"];
+    }
+    return readRelativeFile("../images/defaultpfp.jpeg");
 }
