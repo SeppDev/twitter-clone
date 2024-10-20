@@ -1,6 +1,45 @@
 @import url("posts.css");
 
-#wrapper {
+.containers {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#content {
+    width: 800px;
+    max-width: 100vw;
+}
+
+#post_dialog {
+    width: 100%;
+    min-height: 100px;
+    background-color: red;
+    display: flex;
+    flex-direction: row;
+}
+
+#post_dialog_inner {
+    
+}
+
+#post_dialog_container {
+    width: 100%;
+
+}
+
+#post_dialog_text {
+    width: 100%;
+}
+
+.profile_picture {
+    aspect-ratio: 1;
+    height: 40px;
+    border-radius: 1000px;
+}
+
+/* #wrapper {
     justify-content: center;
     float: right;
     width: 40%;
@@ -12,20 +51,11 @@
     margin: 10px 20vh 10px 0;
     border-radius: 30px;
 }
-html, body {
-    overflow: hidden;
-}
 .profile {
     display: flex;
     flex-direction: row;
 }
 
-body {
-    background: black;
-    padding: 0;
-    color: white;
-    height: 100vh;
-}
 .container {
     margin: 0;
     padding: 0;
@@ -178,4 +208,4 @@ h1 {
     margin: auto 20px;
     font-size: larger;
 }
-
+ */

@@ -9,7 +9,6 @@ function checkPostStatus(likeButton, status, likesCountLabel, likes) {
 async function likePost(likeButton, postId, currentStatus, likesCountlabel, likes) {
     checkPostStatus(likeButton, currentStatus == false, likesCountlabel, likes);
 
-    console.log(currentStatus == false);
     const response = await fetch(baseUrl + "api/like", {
         method: "POST",
         headers: {

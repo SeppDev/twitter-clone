@@ -1,22 +1,22 @@
+@import url("dialog.css");
+
 :root {
     --main-color: rgb(29, 155, 240);
     --text-color: rgb(255, 255, 255);
-
     --like-color: rgb(248, 3, 77);
 }
 
 * {
     color: var(--text-color);
-    /* font-family: myFirstFont; */
     font-family: Calibri, -apple-system
+    /* font-family: myFirstFont; */
 }
 
 html,
 body {
-    background-color: rgb(20,25,30);
+    background-color: rgb(12, 16, 19);
     margin: 0px;
     padding: 0px;
-    /* overflow: hidden; */
 }
 
 
@@ -41,8 +41,6 @@ dialog>div {
     margin: 10px;
     background-color: red;
 }
-
-
 
 .dialog-close {
     font-family: monospace;
@@ -95,6 +93,6 @@ button:hover {
 }
 
 @font-face {
-    font-family: myFirstFont;
+    font-family: chirp;
     src: url(../fonts/chirp-extended-heavy-web.ttf);
 }

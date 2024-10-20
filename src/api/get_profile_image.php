@@ -1,6 +1,6 @@
 <?php
 require "../modules/database.php";
 
-$userId = $_GET["userid"];
+$userId = isset($_GET["userid"]) ? $_GET["userid"] : readRelativeFile("../images/defaultpfp.jpeg");
 
 echo getProfileImage($userId);

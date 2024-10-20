@@ -335,8 +335,6 @@ function fetchTweets(int|null $authorId): void
     $query->execute();
 
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
-    // echo json_encode($result);
-
     foreach ($result as $post) {
         $author = getUserById($post["author"]);
         $postId = $post["id"];
