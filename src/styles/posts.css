@@ -16,7 +16,7 @@
 
 .post_section {
     flex-grow: 1;
-    gap: 8px;
+    gap: 10px;
     display: flex;
     flex-direction: column;
 }
@@ -42,15 +42,18 @@
     color: rgb(255, 255, 255);
     font-size: 1rem;
 }
+
 .post_author>p {
     margin: 0px;
     margin-top: 4px;
     font-weight: 400;
-    color: rgb(200,200,200);
+    color: rgb(200, 200, 200);
     font-size: 0.8rem;
 }
 
 .post_media {
+    outline: 2px white;
+    border-radius: 14px;
     max-width: 100%;
 }
 
@@ -60,16 +63,23 @@
     gap: 10px;
 }
 
+
+
+
+
+
+
 .post_like {
     display: flex;
     flex-direction: row;
     justify-items: left;
     align-items: center;
-    gap: 6px;
+    position: relative;
+    gap: 20px;
 }
 
 .post_like_button {
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
     height: 100%;
     display: flex;
     justify-content: center;
@@ -77,29 +87,52 @@
     position: relative;
     z-index: 1;
 }
+
 .post_like_hover {
     position: absolute;
-    background-color: rgba(255,0,0,0);
+    background-color: rgba(255, 0, 0, 0);
     aspect-ratio: 1;
     height: 30px;
     z-index: -1;
     border-radius: 1000px;
     transition-duration: 200ms;
 }
+
 .post_like_button:hover>.post_like_hover {
-    background-color: rgba(255,0,0,0.3);
+    background-color: rgba(255, 0, 0, 0.3);
     height: 40px;
+}
+.post_like_button:hover>svg {
+    stroke: var(--like-color);
 }
 
 .post_heart_liked {
-    fill: red;
-    color: red;
-    transition-duration: 500ms;
+    fill: var(--like-color);;
+    color: var(--like-color);;
+    stroke: var(--like-color);;
+    animation: heart_beep 400ms ease-in-out;
+    transition-duration: 300ms;
+    position: absolute;
 }
 
+
 .post_heart_unliked {
-    fill: rgba(255, 255, 255, 0);
-    color: rgba(0, 0, 0, 0);
+    position: absolute;
+    fill: rgba(255, 0, 0, 0);
+    color: rgba(255, 0, 0, 0);
     stroke: rgb(141, 141, 141);
-    transition-duration: 500ms;
+    transition-duration: 300ms;
+}
+
+@keyframes heart_beep {
+    0% {
+        scale: 1
+    }
+
+    60% {
+        scale: 1.4;
+    }
+    100% {
+        scale: 1;
+    }
 }

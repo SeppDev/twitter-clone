@@ -266,31 +266,6 @@ function postLikes(int $postId): int
     return $result["COUNT(*)"];
 }
 
-function like(int $postId, User $user): bool
-{
-    $connection = $GLOBALS["database"];
-    $result = likeStatus($postId, $user->id);
-
-    if ($result) {
-        $query = $connection->prepare("DELETE FROM `likes` WHERE (`author`) LIKE ? AND link LIKE ? ");
-        $query->bindParam(1, $user->id, PDO::PARAM_INT);
-        $query->bindParam(2, $postId, PDO::PARAM_INT);
-        $query->execute();
-        $result = false;
-    } else {
-        $query = $connection->prepare("INSERT INTO `likes` (`author`, `link`) VALUES (?, ?)");
-        $query->bindParam(1, $user->id, PDO::PARAM_INT);
-        $query->bindParam(2, $postId, PDO::PARAM_INT);
-        $query->execute();
-        $result = true;
-    }
-    $count = postLikes($postId);
-    die(json_encode(array(
-        "result" => $result,
-        "count" => $count,
-    )));
-}
-
 function getUsers()
 {
     $connection = $GLOBALS["database"];
@@ -339,8 +314,7 @@ class tweet
         $user = getUserById($this->authorId);
         $likeStatus = likeStatus($postId, $this->authorId);
 
-        echo buildTweet($user->username, $this->content, $postId, $likeStatus, postLikes($postId), $hasImage, $this->authorId);
-        die();
+        echo buildPost($this->authorId, $user->username, $this->content, $postId, $likeStatus, postLikes($postId));
     }
 }
 
@@ -362,34 +336,11 @@ function fetchTweets(int|null $authorId): void
         $author = getUserById($post["author"]);
         $postId = $post["id"];
         $likeStatus = likeStatus($postId, $post["author"]);
-        $username = $author->username;
-
         $content = $post["content"];
 
-        echo buildPost($author->id, $author->username, $content, $postId, isset($post['image']), $likeStatus, postLikes($postId));
+        echo buildPost($author->id, $author->username, $content, $postId, $likeStatus, postLikes($postId));
     }
 
-}
-
-
-function buildTweet(string $username, string $content, int $postId, bool $status, int $likeCount, bool $hasImage, int $authorId): string
-{
-    $component = $GLOBALS["component"];
-
-    if ($hasImage) {
-        $component = str_replace("{{image}}", "<img src=\"api/get_image?file={{post_id}}\" class=\"image\">", $component);
-    } else {
-        $component = str_replace("{{image}}", "", $component);
-    }
-
-    $component = str_replace("{{profile_image}}", "api/get_profile_image?userid=$authorId", $component);
-
-    $component = str_replace("{{username}}", $username, $component);
-    $component = str_replace("{{content}}", $content, $component);
-    $component = str_replace("{{post_id}}", $postId, $component);
-    $component = str_replace("{{like_count}}", $likeCount, $component);
-    $component = str_replace("{{like_status}}", boolToText($status), $component);
-    return $component;
 }
 
 function boolToText(bool $bool)
