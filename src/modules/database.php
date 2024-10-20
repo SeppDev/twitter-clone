@@ -6,7 +6,12 @@ require "$dir/../modules/post_builder.php";
 function readRelativeFile(string $path): string
 {
     $dir = __DIR__;
-    return file_get_contents("$dir/$path");
+    $content = file_get_contents("$dir/$path");
+    if ($content == false) {
+        build_error("Failed to find path: $dir/$path");
+    }
+
+    return $content;
 }
 
 try {
@@ -14,7 +19,6 @@ try {
 } catch (Exception $e) {
     die("Error: " . $e->getMessage());
 }
-$GLOBALS["component"] = readRelativeFile("../components/tweet.html");
 $GLOBALS["post_component"] = readRelativeFile("../components/post.html");
 
 function build_error(string $message)
@@ -130,13 +134,14 @@ class User
     public string $username;
     public string|null $profile_image;
     public string $reg_date;
+    public string $description;
 
 }
 
 function getUserById(int $id): User|null
 {
     $connection = $GLOBALS["database"];
-    $query = $connection->prepare("SELECT `id`, `username`, `reg_date`, `profile_img` FROM `users` WHERE id LIKE (?)");
+    $query = $connection->prepare("SELECT * FROM `users` WHERE id LIKE (?)");
     $query->bindParam(1, $id, PDO::PARAM_INT);
     $query->execute();
 
@@ -150,6 +155,7 @@ function getUserById(int $id): User|null
     $object->username = $user['username'];
     $object->reg_date = $user['reg_date'];
     $object->profile_image = $user['profile_img'];
+    $object->description = $user["description"];
 
     return $object;
 }
@@ -158,7 +164,7 @@ function getUserById(int $id): User|null
 function getUserByName(string $username): User|null
 {
     $connection = $GLOBALS["database"];
-    $query = $connection->prepare("SELECT `id`, `username`, `reg_date`, `profile_img` FROM `users` WHERE username LIKE (?)");
+    $query = $connection->prepare("SELECT * FROM `users` WHERE username LIKE (?)");
     $query->bindParam(1, $username, PDO::PARAM_STR);
     $query->execute();
 
@@ -172,6 +178,7 @@ function getUserByName(string $username): User|null
     $object->username = $user['username'];
     $object->reg_date = $user['reg_date'];
     $object->profile_image = $user['profile_img'];
+    $object->description = $user["description"];
 
     return $object;
 }
@@ -308,19 +315,17 @@ class tweet
             $hasImage = false;
         }
         $query->execute();
-
         $postId = $connection->lastInsertId();
-
         $user = getUserById($this->authorId);
-        $likeStatus = likeStatus($postId, $this->authorId);
 
-        echo buildPost($this->authorId, $user->username, $this->content, $postId, $likeStatus, postLikes($postId));
+        echo buildPost($this->authorId, $user->username, $this->content, $postId, false, postLikes($postId));
     }
 }
 
 function fetchTweets(int|null $authorId): void
 {
     $connection = $GLOBALS["database"];
+    $currentUser = getUserSession();
 
     $query = $connection->prepare("SELECT * FROM `posts`");
     if (isset($authorId)) {
@@ -335,20 +340,12 @@ function fetchTweets(int|null $authorId): void
     foreach ($result as $post) {
         $author = getUserById($post["author"]);
         $postId = $post["id"];
-        $likeStatus = likeStatus($postId, $post["author"]);
+        $likeStatus = likeStatus($postId, $currentUser->id);
         $content = $post["content"];
 
         echo buildPost($author->id, $author->username, $content, $postId, $likeStatus, postLikes($postId));
     }
 
-}
-
-function boolToText(bool $bool)
-{
-    if ($bool) {
-        return "true";
-    }
-    return "false";
 }
 function getPostImage(int $postId): string|null
 {

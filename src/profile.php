@@ -74,10 +74,7 @@ require "modules/database.php";
                             echo $user->username;
                             ?>
                         </h2>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse, veritatis sapiente deleniti
-                            iusto
-                            pariatur animi asperiores, tenetur quo laborum, quae consequatur praesentium? Quisquam odio
-                            sapiente quas laboriosam quae nisi eaque!</p>
+                        <p><?php echo $user->description ?></p>
                     </div>
                 </div>
                 <!-- <nav id="profile-navigation">

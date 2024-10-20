@@ -1,8 +1,14 @@
+@import url("posts.css");
+
 #page {
     display: flex;
     justify-content: center;
     /* height: 100vh; */
     /* margin: 10px; */
+}
+
+#posts {
+    background-color: rgb(28, 45, 58);
 }
 
 #profilepage {

@@ -65,7 +65,7 @@ if (!$user) {
                 ?>
             </div>
 
-            <div id="wrapper">
+            <div id="posts">
                 <?php
                 fetchTweets(null);
                 ?>
@@ -134,31 +134,6 @@ if (!$user) {
                     wrapper.appendChild(element);
                 }
 
-                async function likePost(button, postId) {
-                    const response = await fetch("api/like", {
-                        method: "POST",
-                        headers: {
-                            postId: postId
-                        }
-                    })
-                    const json = await response.json()
-                    if (json.error) {
-                        console.log(json.error);
-                        return
-                    }
-                    checkLikeStatus(button, json.result == true);
-                    document.getElementById(`count_${postId}`).innerHTML = json.count;
-                }
-
-                function checkLikeStatus(button, status) {
-                    if (status) {
-                        button.style.color = "red"
-                        button.style.fill = "red"
-                    } else {
-                        button.style.color = "white"
-                        button.style.fill = "none"
-                    }
-                }
             </script>
         </div>
     </div>

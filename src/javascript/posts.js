@@ -7,7 +7,7 @@ function checkPostStatus(likeButton, status, likesCountLabel, likes) {
 }
 
 async function likePost(likeButton, postId, currentStatus, likesCountlabel, likes) {
-    checkPostStatus(likeButton, currentStatus == false, likesCountlabel, 0)
+    checkPostStatus(likeButton, currentStatus == false, likesCountlabel, likes);
 
     console.log(currentStatus == false);
     const response = await fetch(baseUrl + "api/like", {
@@ -25,8 +25,6 @@ async function likePost(likeButton, postId, currentStatus, likesCountlabel, like
         checkPostStatus(likeButton, currentStatus, likesCountlabel, likes);
         return currentStatus;
     }
-
-    console.log(json);
 
     checkPostStatus(likeButton, json.result, likesCountlabel, json.count);
 

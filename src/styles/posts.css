@@ -43,12 +43,16 @@
     font-size: 1rem;
 }
 
+
+.post_author>label {
+    font-size: 1.5rem;
+}
 .post_author>p {
     margin: 0px;
     margin-top: 4px;
     font-weight: 400;
     color: rgb(200, 200, 200);
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .post_media {
