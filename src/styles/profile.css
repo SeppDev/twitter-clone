@@ -37,7 +37,7 @@
     flex-direction: column;
     width: 100%;
     flex-grow: 1;
-    background-color: red;
+    background-color: rgb(15,20,25);
 }
 
 
@@ -74,21 +74,13 @@
     height: 150px;
     aspect-ratio: 1;
     border-radius: 100vh;
-    outline: 4px solid;
+    background-color: rgba(0,0,0,0);
+    outline: white 4px solid;
     border: none;
-    outline: none;
     margin: 0px;
-    padding: 4px;
+    padding: 0px;
 }
 
-#profile-image-container:hover > #edit-profile-image {
-    background-color: red;
-}
-
-#edit-profile-image {
-    height: 100%;
-    width: 100%;
-}
 
 .profile-image {
     height: 100%;

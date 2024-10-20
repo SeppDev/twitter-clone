@@ -1,5 +1,8 @@
 <?php
 
+$dir = __DIR__;
+require "$dir/../modules/post_builder.php";
+
 function readRelativeFile(string $path): string
 {
     $dir = __DIR__;
@@ -12,7 +15,7 @@ try {
     die("Error: " . $e->getMessage());
 }
 $GLOBALS["component"] = readRelativeFile("../components/tweet.html");
-
+$GLOBALS["post_component"] = readRelativeFile("../components/post.html");
 
 function build_error(string $message)
 {
@@ -341,36 +344,33 @@ class tweet
     }
 }
 
-function fetchTweets(int|null $userid): void
+function fetchTweets(int|null $authorId): void
 {
     $connection = $GLOBALS["database"];
 
     $query = $connection->prepare("SELECT * FROM `posts`");
-    if (isset($userid)) {
-        $query = $connection->prepare("SELECT * FROM `posts` WHERE id LIKE ?");
-        $query->bindParam(1, $userId, PDO::PARAM_INT);
+    if (isset($authorId)) {
+        $query = $connection->prepare("SELECT * FROM `posts` WHERE author LIKE ?");
+        $query->bindParam(1, $authorId, PDO::PARAM_INT);
     }
     $query->execute();
 
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
+    // echo json_encode($result);
+
     foreach ($result as $post) {
         $author = getUserById($post["author"]);
-        $likeStatus = likeStatus($post["id"], $post["author"]);
+        $postId = $post["id"];
+        $likeStatus = likeStatus($postId, $post["author"]);
         $username = $author->username;
 
         $content = $post["content"];
-        $id = $post["id"];
 
-        if (!$post['image']) {
-            $hasImage = false;
-        } else {
-            $hasImage = true;
-        }
-
-        echo buildTweet($username, $content, $id, $likeStatus, postLikes($id), $hasImage, $author->id);
+        echo buildPost($author->id, $author->username, $content, $postId, isset($post['image']), $likeStatus, postLikes($postId));
     }
 
 }
+
 
 function buildTweet(string $username, string $content, int $postId, bool $status, int $likeCount, bool $hasImage, int $authorId): string
 {

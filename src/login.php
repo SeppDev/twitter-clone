@@ -22,7 +22,7 @@ if ($user) {
 
         <div id="containers">
             <div id="logo-container" class="container">
-                <img id="logo" src="https://logos-world.net/wp-content/uploads/2020/04/Twitter-Logo.png">
+                <img id="logo" src="images/voggel.png">
             </div>
             <div id="login-container" class="container">
                 <h1 style="font-size: 3.7rem; font-weight: 700">Happening now</h1>
@@ -37,7 +37,7 @@ if ($user) {
                     </div>
 
 
-                    <button id="create-account">
+                    <button class="action-button" id="create-account">
                         Create account
                     </button>
 
@@ -46,7 +46,7 @@ if ($user) {
                         <span>or</span>
                         <hr />
                     </div>
-                    <button id="sign-in">
+                    <button class="action-button" id="sign-in">
                         Sign in
                     </button>
 
@@ -121,7 +121,7 @@ if ($user) {
             <a>Developers</a>
             <a>Directory</a>
             <a>Settings</a>
-            <a>© 2024 X Corp.</a>
+            <a>© 2069 Chirpify Corp.</a>
         </div>
     </div>
 </body>

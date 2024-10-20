@@ -15,6 +15,7 @@ if (!$user) {
 <head>
     <title>Chirpify</title>
     <link rel="stylesheet" href="styles/home.css">
+    <script src="../javascript/posts.js"></script>
 </head>
 
 <body>
