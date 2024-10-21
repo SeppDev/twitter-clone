@@ -28,23 +28,23 @@ function build_error(string $message)
     )));
 }
 
-function sanitize_username(string $username): string
+function sanitize_username(string $userName): string
 {
-    return $username;
-    // return $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
+    return $userName;
+    // return $userName = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
 }
 
-function createUser(string $username, string $password)
+function createUser(string $userName, string $password)
 {
-    $username = sanitize_username($username);
-    if (strlen($username) > 20) {
+    $userName = sanitize_username($userName);
+    if (strlen($userName) > 20) {
         build_error("Username is too long!");
     }
 
-    $username = isset($username) ? $username : null;
+    $userName = isset($userName) ? $userName : null;
     $password = isset($password) ? $password : null;
 
-    if (!($username && $password)) {
+    if (!($userName && $password)) {
         build_error("Failed to provide a username or password");
     }
 
@@ -55,25 +55,25 @@ function createUser(string $username, string $password)
 
     $link = "https://static.vecteezy.com/system/resources/previews/022/461/234/large_2x/cute-tiny-cat-ai-generative-image-for-mobile-wallpaper-free-photo.jpg";
 
-    $query->bindParam(1, $username, PDO::PARAM_STR);
+    $query->bindParam(1, $userName, PDO::PARAM_STR);
     $query->bindParam(2, $password_hash, PDO::PARAM_STR);
     $query->bindParam(3, $link, PDO::PARAM_STR);
     try {
         $query->execute();
-        loginUser($username, $password);
+        loginUser($userName, $password);
     } catch (PDOException $e) {
         build_error($e->getMessage());
     }
 }
 
-function loginUser(string $username, string $password)
+function loginUser(string $userName, string $password)
 {
-    $username = sanitize_username($username);
+    $userName = sanitize_username($userName);
     $password_hash = hash("sha256", $password);
     $connection = $GLOBALS["database"];
 
     $query = $connection->prepare("SELECT `id`, `password` FROM `users` WHERE username LIKE (?)");
-    $query->bindParam(1, $username, PDO::PARAM_STR);
+    $query->bindParam(1, $userName, PDO::PARAM_STR);
 
     try {
         $query->execute();
@@ -131,7 +131,7 @@ function logoutUser(string $token)
 class User
 {
     public int $id;
-    public string $username;
+    public string $userName;
     public string|null $profile_image;
     public string $reg_date;
     public string $description;
@@ -152,7 +152,7 @@ function getUserById(int $id): User|null
 
     $object = new User();
     $object->id = $user['id'];
-    $object->username = $user['username'];
+    $object->userName = $user['username'];
     $object->reg_date = $user['reg_date'];
     $object->profile_image = $user['profile_img'];
     $object->description = $user["description"];
@@ -161,11 +161,11 @@ function getUserById(int $id): User|null
 }
 
 
-function getUserByName(string $username): User|null
+function getUserByName(string $userName): User|null
 {
     $connection = $GLOBALS["database"];
     $query = $connection->prepare("SELECT * FROM `users` WHERE username LIKE (?)");
-    $query->bindParam(1, $username, PDO::PARAM_STR);
+    $query->bindParam(1, $userName, PDO::PARAM_STR);
     $query->execute();
 
     $user = $query->fetch(PDO::FETCH_ASSOC);
@@ -175,7 +175,7 @@ function getUserByName(string $username): User|null
 
     $object = new User();
     $object->id = $user['id'];
-    $object->username = $user['username'];
+    $object->userName = $user['username'];
     $object->reg_date = $user['reg_date'];
     $object->profile_image = $user['profile_img'];
     $object->description = $user["description"];
@@ -318,7 +318,7 @@ class tweet
         $postId = $connection->lastInsertId();
         $user = getUserById($this->authorId);
 
-        echo buildPost($this->authorId, $user->username, $this->content, $postId, false, postLikes($postId));
+        echo buildPost($this->authorId, $user->userName, $this->content, $postId, false, postLikes($postId));
     }
 }
 
@@ -341,7 +341,7 @@ function fetchTweets(int|null $authorId): void
         $likeStatus = likeStatus($postId, $currentUser->id);
         $content = $post["content"];
 
-        echo buildPost($author->id, $author->username, $content, $postId, $likeStatus, postLikes($postId));
+        echo buildPost($author->id, $author->userName, $content, $postId, $likeStatus, postLikes($postId));
     }
 
 }

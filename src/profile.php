@@ -71,7 +71,7 @@ require "modules/database.php";
                     <div>
                         <h2>
                             <?php
-                            echo $user->username;
+                            echo $user->userName;
                             ?>
                         </h2>
                         <p><?php echo $user->description ?></p>
