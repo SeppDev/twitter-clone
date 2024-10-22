@@ -28,7 +28,7 @@ if (!$user) {
 <body>
     <dialog id="post-dialog">
         <div>
-            <label>post</label>
+            <input type="file" accept="image/*" id="post-image">
         </div>
     </dialog>
     <div id="containers">
