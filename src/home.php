@@ -12,32 +12,34 @@ if (!$user) {
 <html lang="en">
 
 <head>
+    <title>Chirpify</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="styles/basic.css">
     <link rel="stylesheet" href="styles/home.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="javascript/basics.js"></script>
+    <script src="javascript/logout.js"></script>
+    <script defer src="javascript/post.js"></script>
     <script defer src="javascript/posts.js"></script>
-    <title>Chirpify</title>
 </head>
 
 <body>
+    <dialog id="post-dialog">
+        <div>
+            <label>post</label>
+        </div>
+    </dialog>
     <div class="containers">
-        <!-- <div class="actions"></div> -->
-        <main id="content">
-            <div id="post_dialog">
-                <div id="post_dialog_inner">
-
-                </div>
-                <img class="profile_picture" src=<?php echo "'api/get_profile_image?userid=$user->id'" ?>>
-                <div id="post_dialog_container">
-                    <input type="text" id="post_dialog_text">
-                </div>
-            </div>
-            <div id="posts">
-                <?php
-                    fetchTweets(null);
-                ?>
-            </div>
+        <div class="actions">
+            <button class="action" onclick="openPostDialog()">Post</button>
+            <button class="action" onclick="logout()">Logout</button>
+        </div>
+        <main id="posts">
+            <?php
+            fetchTweets(null);
+            ?>
         </main>
     </div>
 </body>

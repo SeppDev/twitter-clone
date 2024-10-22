@@ -1,0 +1,17 @@
+.action {
+    border-radius: 1000px;
+    padding: 16px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    font-size: 1rem;
+    font-weight: 800;
+    background-color: var(--main-color);
+}
+
+button {
+    border: none;
+}
+
+button:hover {
+    cursor: pointer;
+}

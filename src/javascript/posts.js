@@ -1,4 +1,3 @@
-const baseUrl = new URL("https://localhost/twitter-clone/");
 
 function checkPostStatus(likeButton, status, likesCountLabel, likes) {
     const svg = likeButton.children[1];

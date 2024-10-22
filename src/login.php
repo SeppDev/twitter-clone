@@ -14,6 +14,11 @@ if ($user) {
     <link rel="stylesheet" type="text/css" href="styles/basic.css">
     <link rel="stylesheet" type="text/css" href="styles/login.css">
     <title>Chirpify</title>
+
+    <script>
+    /*to prevent Firefox FOUC, this must be here*/
+    let FF_FOUC_FIX;
+  </script>
 </head>
 
 <body>
@@ -29,7 +34,7 @@ if ($user) {
                 <label style="font-size: 2rem">Join today.</label>
 
                 <form id="logins">
-                    <div id="social-logins-container">
+                    <div id="input-container">
                         <p>Username</p>
                         <input type="user" class="input-field" id="username">
                         <p>Passsword</p>
@@ -37,7 +42,7 @@ if ($user) {
                     </div>
 
 
-                    <button class="action-button" id="create-account">
+                    <button class="action" id="create-account">
                         Create account
                     </button>
 
@@ -46,7 +51,7 @@ if ($user) {
                         <span>or</span>
                         <hr />
                     </div>
-                    <button class="action-button" id="sign-in">
+                    <button class="action" id="sign-in">
                         Sign in
                     </button>
 
@@ -66,7 +71,7 @@ if ($user) {
                             }
                             const token = json.session_token;
 
-                            document.cookie = `session_token=${token}`
+                            document.cookie = `session_token=${token}; SameSite=Lax; Secure`
                             window.location.href = "./home"
                         }
 
@@ -105,7 +110,7 @@ if ($user) {
 
         <div id="links">
             <a>About</a>
-            <a>Download the X app</a>
+            <a>Download the Chirpify app</a>
             <a>Help Center</a>
             <a>Terms of Service</a>
             <a>Privacy Policy</a>
