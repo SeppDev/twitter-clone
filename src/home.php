@@ -31,8 +31,8 @@ if (!$user) {
             <label>post</label>
         </div>
     </dialog>
-    <div class="containers">
-        <div class="actions">
+    <div id="containers">
+        <div id="actions">
             <button class="action" onclick="openPostDialog()">Post</button>
             <button class="action" onclick="logout()">Logout</button>
         </div>
