@@ -17,10 +17,11 @@ dialog[open] {
 dialog>div {
     width: 500px;
     height: 500px;
-    background-color: red;
+    background-color: rgb(40,45,50);
     max-width: 100vw;
     max-height: 100vh;
     padding: 10px;
     margin: 10px;
     border-radius: 12px;
+    position: relative;
 }

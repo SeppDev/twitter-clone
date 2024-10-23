@@ -50,11 +50,13 @@ function handlePost(post) {
     }
 }
 
-// const observer = new MutationObserver((list, _) => {
+const posts = document.getElementById("posts");
+const observer = new MutationObserver((list, _) => {
+    const post = list[0].addedNodes[0];
 
-// });
-// const posts = document.getElementById("posts");
-// observer.observe(posts, { childList: true })
+    handlePost(post);
+});
+observer.observe(posts, { childList: true })
 
 for (child of posts.children) {
     handlePost(child);
