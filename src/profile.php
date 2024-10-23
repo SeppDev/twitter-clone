@@ -11,6 +11,7 @@ require "modules/database.php";
     <link rel="stylesheet" type="text/css" href="../styles/profile.css">
     <link rel="stylesheet" type="text/css" href="../styles/basic.css">
 
+    <script defer src="../javascript/basics.js"></script>
     <script defer src="../javascript/posts.js"></script>
     <title>Chirpify</title>
 </head>
