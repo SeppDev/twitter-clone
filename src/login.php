@@ -13,12 +13,8 @@ if ($user) {
 <head>
     <link rel="stylesheet" type="text/css" href="styles/basic.css">
     <link rel="stylesheet" type="text/css" href="styles/login.css">
+    <link rel="stylesheet" type="text/css" href="styles/button.css">
     <title>Chirpify</title>
-
-    <script>
-    /*to prevent Firefox FOUC, this must be here*/
-    let FF_FOUC_FIX;
-  </script>
 </head>
 
 <body>
@@ -41,8 +37,7 @@ if ($user) {
                         <input type="password" class="input-field" id="password">
                     </div>
 
-
-                    <button class="action" id="create-account">
+                    <button class="action primary-button" id="create-account">
                         Create account
                     </button>
 
@@ -51,7 +46,7 @@ if ($user) {
                         <span>or</span>
                         <hr />
                     </div>
-                    <button class="action" id="sign-in">
+                    <button class="action secondary-button" id="sign-in">
                         Sign in
                     </button>
 

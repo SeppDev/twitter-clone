@@ -31,13 +31,13 @@ if (!$user) {
             <input type="text" placeholder="I like fortnite!" id="post-text-input">
             <input type="file" accept="image/*" id="post-image-input">
 
-            <button class="post_button action" onclick="post()">Post</button>
+            <button class="post_button action primary-button" onclick="post()">Post</button>
         </div>
     </dialog>
     <div id="containers">
         <div id="actions">
-            <button class="action" onclick="openPostDialog()">Post</button>
-            <button class="action" onclick="logout()">Logout</button>
+            <button class="action primary-button" onclick="openPostDialog()">Post</button>
+            <button class="action primary-button" onclick="logout()">Logout</button>
         </div>
         <main id="posts">
             <?php
