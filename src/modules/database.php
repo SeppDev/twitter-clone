@@ -279,13 +279,6 @@ class tweet
         $this->content = $content;
         $this->authorId = $authorId;
     }
-    private function posts()
-    {
-        $connection = $GLOBALS["database"];
-        $query = $connection->prepare("SELECT * FROM posts ORDER BY id DESC");
-        $query->execute();
-        return $query->fetchAll(PDO::FETCH_ASSOC);
-    }
     public function post(): void
     {
         $connection = $GLOBALS["database"];
@@ -297,11 +290,9 @@ class tweet
             $fileTmpPath = $_FILES["file"]['tmp_name'];
             $fileData = file_get_contents($fileTmpPath);
             $query->bindParam(3, $fileData, PDO::PARAM_STR);
-            $hasImage = true;
         } else {
             $value = null;
             $query->bindParam(3, $value);
-            $hasImage = false;
         }
         $query->execute();
         $postId = $connection->lastInsertId();
@@ -332,7 +323,6 @@ function fetchTweets(int|null $authorId): void
 
         echo buildPost($author->id, $author->userName, $content, $postId, $likeStatus, postLikes($postId));
     }
-
 }
 function getPostImage(int $postId): string|null
 {
