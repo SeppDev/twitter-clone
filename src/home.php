@@ -28,7 +28,10 @@ if (!$user) {
 <body>
     <dialog id="post-dialog">
         <div>
-            <input type="file" accept="image/*" id="post-image">
+            <input type="text" placeholder="I like fortnite!" id="post-text-input">
+            <input type="file" accept="image/*" id="post-image-input">
+
+            <button class="post_button action" onclick="post()">Post</button>
         </div>
     </dialog>
     <div id="containers">

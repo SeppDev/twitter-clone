@@ -6,9 +6,9 @@ require "$dir/../modules/post_builder.php";
 function readRelativeFile(string $path): string
 {
     $dir = __DIR__;
-    $content = file_get_contents("$dir/$path");
+    $content = file_get_contents("$dir/../$path");
     if ($content == false) {
-        build_error("Failed to find path: $dir/$path");
+        build_error("Failed to find path: $dir/../$path");
     }
 
     return $content;
@@ -19,7 +19,7 @@ try {
 } catch (Exception $e) {
     die("Error: " . $e->getMessage());
 }
-$GLOBALS["post_component"] = readRelativeFile("../components/post.html");
+$GLOBALS["post_component"] = readRelativeFile("components/post.html");
 
 function build_error(string $message)
 {
@@ -307,9 +307,9 @@ function fetchTweets(int|null $authorId): void
     $connection = $GLOBALS["database"];
     $currentUser = getUserSession();
 
-    $query = $connection->prepare("SELECT * FROM `posts`");
+    $query = $connection->prepare("SELECT * FROM `posts` ORDER BY id DESC");
     if (isset($authorId)) {
-        $query = $connection->prepare("SELECT * FROM `posts` WHERE author LIKE ?");
+        $query = $connection->prepare("SELECT * FROM `posts` WHERE author LIKE ? ORDER BY id DESC");
         $query->bindParam(1, $authorId, PDO::PARAM_INT);
     }
     $query->execute();
@@ -333,18 +333,4 @@ function getPostImage(int $postId): string|null
     $result = $query->fetch(PDO::FETCH_ASSOC);
     header("Content-Type: image/*");
     return $result['image'];
-}
-
-function getProfileImage(int $userId): string
-{
-    $connection = $GLOBALS["database"];
-    $query = $connection->prepare("SELECT `profile_img` FROM `users` WHERE id LIKE ?");
-    $query->bindParam(1, $userId, PDO::PARAM_INT);
-    $query->execute();
-    $result = $query->fetch(PDO::FETCH_ASSOC);
-    header("Content-Type: image/*");
-    if (isset($result['profile_img'])) {
-        return $result["profile_img"];
-    }
-    return readRelativeFile("../images/defaultpfp.jpeg");
 }
