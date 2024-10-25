@@ -23,6 +23,7 @@ if (!$user) {
     <script src="javascript/logout.js"></script>
     <script defer src="javascript/post.js"></script>
     <script defer src="javascript/posts.js"></script>
+    <script defer src="javascript/edit.js"></script>
 </head>
 
 <body>
@@ -32,6 +33,15 @@ if (!$user) {
             <input type="file" accept="image/*" id="post-image-input">
 
             <button class="post_button action primary-button" onclick="post()">Post</button>
+        </div>
+    </dialog>
+    <dialog id="edit-dialog">
+        <div>
+            <input type="text" placeholder="I like blending cats!" id="edit-text-input">
+            <input type="file" placeholder="none" id="edit-image-input">
+
+            <button class="edit_button action" onclick="edit()">submit</button>
+            <button onclick="clearEdit()">clear</button>
         </div>
     </dialog>
     <div id="containers">

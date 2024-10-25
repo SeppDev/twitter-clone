@@ -226,10 +226,24 @@ function getUserSession(): User|null
 function editTweet(int $postId, string $content)
 {
     $connection = $GLOBALS["database"];
-    $query = $connection->prepare("UPDATE posts SET content=? WHERE id LIKE ?");
+    $query = $connection->prepare("UPDATE posts SET content=?, image=? WHERE id LIKE ?");
     $query->bindParam(1, $content, PDO::PARAM_STR);
-    $query->bindParam(2, $postId, PDO::PARAM_INT);
+    if (isset($_FILES["image"])) {
+        $fileTmpPath = $_FILES["image"]['tmp_name'];
+        $fileData = file_get_contents($fileTmpPath);
+        $query->bindParam(2, $fileData, PDO::PARAM_STR);
+    } else {
+        $value = null;
+        $query->bindParam(2, $value);
+    }
+    $query->bindParam(3, $postId, PDO::PARAM_INT);
     $query->execute();
+
+    $post = getPost($postId);
+    $likeStatus = likeStatus($postId, getUserSession()->id);
+    echo json_encode(array(
+        "status" => true
+    ));
 }
 
 function likeStatus(int $postId, int $userId): bool
@@ -259,6 +273,20 @@ function postLikes(int $postId): int
     return $result["COUNT(*)"];
 }
 
+function getPost($postId): array|null
+{
+    $connection = $GLOBALS["database"];
+    $query = $connection->prepare("SELECT * FROM `posts` WHERE id LIKE ?");
+    $query->bindParam(1, $postId, PDO::PARAM_INT);
+    $query->execute();
+
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    if (!$result) {
+        return [];
+    }
+    return $result;
+}
+
 function getUsers()
 {
     $connection = $GLOBALS["database"];
@@ -276,13 +304,6 @@ class tweet
         $this->content = $content;
         $this->authorId = $authorId;
     }
-    private function posts()
-    {
-        $connection = $GLOBALS["database"];
-        $query = $connection->prepare("SELECT * FROM posts ORDER BY id DESC");
-        $query->execute();
-        return $query->fetchAll(PDO::FETCH_ASSOC);
-    }
     public function post(): void
     {
         $connection = $GLOBALS["database"];
@@ -294,11 +315,9 @@ class tweet
             $fileTmpPath = $_FILES["file"]['tmp_name'];
             $fileData = file_get_contents($fileTmpPath);
             $query->bindParam(3, $fileData, PDO::PARAM_STR);
-            $hasImage = true;
         } else {
             $value = null;
             $query->bindParam(3, $value);
-            $hasImage = false;
         }
         $query->execute();
         $postId = $connection->lastInsertId();
@@ -329,7 +348,6 @@ function fetchTweets(int|null $authorId): void
 
         echo buildPost($author->id, $author->userName, $content, $postId, $likeStatus, postLikes($postId));
     }
-
 }
 function getPostImage(int $postId): string|null
 {

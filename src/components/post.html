@@ -3,8 +3,8 @@
         <img class="profile-image post_profile" src="{{base_url}}/api/get_profile_image?userid={{author_id}}">
         <div class="post_section">
             <div class="post_author">
-                <label><a href="{{base_url}}/profile/{{username}}">{{username}}</a></label>
-                <p>{{content}}</p>
+                <label><a href="{{base_url}}/profile/{{username}}" id="name_{{post_id}}">{{username}}</a></label>
+                <p class="post-content">{{content}}</p>
             </div>
             <img class="post_media" src="{{base_url}}/api/get_image?file={{post_id}}"
                 alt="media" onerror="this.style.display='none'">
