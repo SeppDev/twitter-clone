@@ -6,6 +6,11 @@
     align-items: center;
 }
 
+.post-content {
+    text-wrap: all;
+    white-space: pre;
+}
+
 .post_inner {
     gap: 20px;
     width: 100%;

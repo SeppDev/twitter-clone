@@ -19,8 +19,8 @@ if (!$user) {
     <link rel="stylesheet" href="styles/basic.css">
     <link rel="stylesheet" href="styles/home.css">
 
-    <script src="javascript/basics.js"></script>
-    <script src="javascript/logout.js"></script>
+    <script defer src="javascript/logout.js"></script>
+    <script defer src="javascript/basics.js"></script>
     <script defer src="javascript/post.js"></script>
     <script defer src="javascript/posts.js"></script>
     <script defer src="javascript/edit.js"></script>
@@ -29,10 +29,14 @@ if (!$user) {
 <body>
     <dialog id="post-dialog">
         <div>
-            <input type="text" placeholder="I like fortnite!" id="post-text-input">
-            <input type="file" accept="image/*" id="post-image-input">
-
-            <button class="action primary-button" onclick="post()">Post</button>
+            <textarea placeholder="I like fornite" class="post-content-input" id="post-text-input"></textarea>
+            
+            <div class="post-options">
+                <div>
+                    <input type="file" accept="image/*" id="post-image-input">
+                </div>
+                <button class="action primary-button" onclick="post()">Post</button>
+            </div>
         </div>
     </dialog>
     <dialog id="edit-dialog">
@@ -41,7 +45,7 @@ if (!$user) {
             <input type="file" placeholder="none" id="edit-image-input">
 
             <button class="edit_button action primary-button" onclick="edit()">Submit</button>
-            <button onclick="clearEdit()">clear</button>
+            <button onclick="clearEdit()">Clear</button>
         </div>
     </dialog>
     <div id="containers">
