@@ -87,10 +87,12 @@
     padding: 0px;
 }
 
+#profile-image-container>img {
+    height: 100%;
+}
 
 .profile-image {
     aspect-ratio: 1;
-    height: 100%;
     border-radius: 100vh;
     object-fit:cover;
 }
