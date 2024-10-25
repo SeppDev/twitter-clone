@@ -32,6 +32,9 @@ async function likePost(likeButton, postId, currentStatus, likesCountlabel, like
 function handlePost(post) {
     const likeButton = post.getElementsByClassName("post_like_button")[0];
     const likesCountLabel = post.getElementsByClassName("post_likes")[0];
+    const editButton = post.getElementsByClassName("post_edit")[0];
+    const postContent =  post.getElementsByClassName("post-content")[0].innerText;
+    const postImage = post.getElementsByClassName("post_media")[0].src;
     
     const postId = post.getAttribute("post_id");
     let likeStatus = post.getAttribute("status") == "true";
@@ -48,6 +51,9 @@ function handlePost(post) {
         likeStatus = await likePost(likeButton, postId, likeStatus, likesCountLabel, likes);
         awaitingResponse = false;
     }
+    editButton.onclick = () => {
+        openEditDialog(post, postContent);
+    };
 }
 
 const posts = document.getElementById("posts");
