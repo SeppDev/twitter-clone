@@ -51,13 +51,10 @@ function createUser(string $userName, string $password)
     $password_hash = hash("sha256", $password);
     $connection = $GLOBALS["database"];
 
-    $query = $connection->prepare("INSERT INTO `users`(`id`, `username`, `password`, `reg_date`, `profile_img`) VALUES (NULL, ?, ?, NULL, ?)");
-
-    $link = "https://static.vecteezy.com/system/resources/previews/022/461/234/large_2x/cute-tiny-cat-ai-generative-image-for-mobile-wallpaper-free-photo.jpg";
+    $query = $connection->prepare("INSERT INTO `users`(`id`, `username`, `password`, `reg_date`, `profile_img`) VALUES (NULL, ?, ?, NULL, NULL)");
 
     $query->bindParam(1, $userName, PDO::PARAM_STR);
     $query->bindParam(2, $password_hash, PDO::PARAM_STR);
-    $query->bindParam(3, $link, PDO::PARAM_STR);
     try {
         $query->execute();
         loginUser($userName, $password);

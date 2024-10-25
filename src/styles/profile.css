@@ -89,6 +89,8 @@
 
 
 .profile-image {
+    aspect-ratio: 1;
     height: 100%;
     border-radius: 100vh;
+    object-fit:cover;
 }
