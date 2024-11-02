@@ -34,7 +34,7 @@ if (!$user) {
             <input type="text" placeholder="I like fortnite!" id="post-text-input">
             <input type="file" accept="image/*" id="post-image-input">
 
-            <button class="post_button action primary-button" onclick="post()">Post</button>
+            <button class="action primary-button" onclick="post()">Post</button>
         </div>
     </dialog>
     <dialog id="edit-dialog">
@@ -42,7 +42,7 @@ if (!$user) {
             <input type="text" placeholder="I like blending cats!" id="edit-text-input">
             <input type="file" placeholder="none" id="edit-image-input">
 
-            <button class="edit_button action" onclick="edit()">submit</button>
+            <button class="edit_button action primary-button" onclick="edit()">Submit</button>
             <button onclick="clearEdit()">clear</button>
         </div>
     </dialog>
