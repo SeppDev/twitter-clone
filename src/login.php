@@ -14,6 +14,7 @@ if ($user) {
     <link rel="stylesheet" type="text/css" href="styles/basic.css">
     <link rel="stylesheet" type="text/css" href="styles/login.css">
     <link rel="stylesheet" type="text/css" href="styles/button.css">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <title>Chirpify</title>
 </head>
 

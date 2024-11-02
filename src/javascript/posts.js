@@ -34,7 +34,9 @@ function handlePost(post) {
     const likesCountLabel = post.getElementsByClassName("post_likes")[0];
     const editButton = post.getElementsByClassName("post_edit")[0];
     const postContent =  post.getElementsByClassName("post-content")[0].innerText;
-    const postImage = post.getElementsByClassName("post_media")[0].src;
+    const buttons = post.getElementsByClassName("buttons")[0];
+    const postDelete = buttons.getElementsByClassName("post_delete")[0];
+
     
     const postId = post.getAttribute("post_id");
     let likeStatus = post.getAttribute("status") == "true";
@@ -54,16 +56,22 @@ function handlePost(post) {
     editButton.onclick = () => {
         openEditDialog(post, postContent);
     };
+
+    postDelete.onclick = async () => {
+        await deletePost(post);
+    };
 }
 
 const posts = document.getElementById("posts");
 const observer = new MutationObserver((list, _) => {
     const post = list[0].addedNodes[0];
-
+    if (!post) {
+        return;
+    }
     handlePost(post);
 });
 observer.observe(posts, { childList: true })
 
-for (child of posts.children) {
+for (let child of posts.children) {
     handlePost(child);
 }

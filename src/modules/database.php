@@ -239,10 +239,19 @@ function editTweet(int $postId, string $content)
     $query->bindParam(3, $postId, PDO::PARAM_INT);
     $query->execute();
 
-    $post = getPost($postId);
-    $likeStatus = likeStatus($postId, getUserSession()->id);
     echo json_encode(array(
         "status" => true
+    ));
+}
+
+function deleteTweet(int $postId)
+{
+    $connection = $GLOBALS["database"];
+    $query = $connection->prepare("DELETE FROM posts WHERE id LIKE ?");
+    $query->bindParam(1, $postId, PDO::PARAM_STR);
+    $query->execute();
+    echo json_encode(array(
+        "success" => "you got it"
     ));
 }
 
@@ -345,8 +354,12 @@ function fetchTweets(int|null $authorId): void
         $postId = $post["id"];
         $likeStatus = likeStatus($postId, $currentUser->id);
         $content = $post["content"];
-
-        echo buildPost($author->id, $author->userName, $content, $postId, $likeStatus, postLikes($postId));
+        if ($author->userName == $currentUser->userName) {
+            $authorized = true;
+        } else {
+            $authorized = false;
+        }
+        echo buildPost($author->id, $author->userName, $content, $postId, $likeStatus, postLikes($postId), $authorized);
     }
 }
 function getPostImage(int $postId): string|null

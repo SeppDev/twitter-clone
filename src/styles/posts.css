@@ -28,7 +28,9 @@
     object-fit: cover;
 }
 
-.post_edit {
+.buttons {
+    display: flex;
+    flex-direction: row;
     position: absolute;
     right: 0px;
     top: 0px;

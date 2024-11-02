@@ -1,4 +1,4 @@
-const postDialog = document.getElementById("post-dialog");
+let postDialog = document.getElementById("post-dialog");
 
 async function openPostDialog() {
     postDialog.open = true;
@@ -33,7 +33,7 @@ async function post() {
 }
 
 function createElementFromHTML(htmlString) {
-    var div = document.createElement('div');
+    let div = document.createElement('div');
     div.innerHTML = htmlString.trim();
 
     return div.firstChild;

@@ -21,7 +21,6 @@ async function edit() {
     formData.append("postId", OldpostElement.getAttribute("post_id"));
     formData.append("username", username);
     formData.append("image", editImageInput.files[0]);
-    console.log(formData);
     const response = await fetch(`${baseUrl}/api/edit`, {
          method: "POST",
          body: formData
@@ -31,13 +30,16 @@ async function edit() {
         const json = JSON.parse(html);
         if (json.error) {
             alert(json.error);
+            editDialog.open = false;
             return;
         }
     } catch {}
     const postImage = OldpostElement.getElementsByClassName("post_media")[0];
     const content = OldpostElement.getElementsByClassName("post-content")[0];
     content.innerText = editTextInput.value;
-    postImage.src += "#1";
+    const blob = new Blob([editImageInput.files[0]], {type: "image/png"})
+    postImage.src = URL.createObjectURL(blob)
+    postImage.onload = () => URL.revokeObjectURL(postImage.src);
     editImageInput.value = "";
     editTextInput.value = "";
     editDialog.open = false;

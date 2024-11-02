@@ -10,6 +10,7 @@ require "modules/database.php";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../styles/profile.css">
     <link rel="stylesheet" type="text/css" href="../styles/basic.css">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
 
     <script defer src="../javascript/basics.js"></script>
     <script defer src="../javascript/posts.js"></script>
