@@ -1,4 +1,4 @@
-    <?php
+<?php
 require "../modules/database.php";
 
 $user = getUserSession();
@@ -15,8 +15,12 @@ if (!isset($_POST["postId"])) {
     build_error("no id?");
 }
 
-if (getUserByName($_POST["username"])->id != $user->id) {
-    build_error("not your post?");
+$post = getPost($_POST["postId"]);
+if (!isset($post)) {
+    build_error("Could not find post?");
+}
+if ($post->authorId != $user->id) {
+    build_error("Not your post!");
 }
 
 editTweet($_POST["postId"], $_POST["content"]);
