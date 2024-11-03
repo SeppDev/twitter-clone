@@ -34,9 +34,12 @@
 }
 
 .post_edit {
+    background-color: rgba(0,0,0,0);
+    height: 14px;
+    aspect-ratio: 1;
     position: absolute;
-    right: 0px;
-    top: 0px;
+    right: 4px;
+    top: 4px;
 }
 
 .post_author {

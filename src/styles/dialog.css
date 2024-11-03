@@ -39,6 +39,7 @@ dialog>div {
     display: flex;
     flex-direction: row;
     align-items: end;
+    gap: 10px;
 }
 
 .post-content-input {

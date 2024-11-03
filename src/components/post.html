@@ -1,12 +1,15 @@
 <div class="post" status="{{like_status}}" post_id="{{post_id}}">
     <div class="post_inner">
-        <img class="profile-image post_profile" src="{{base_url}}/api/get_profile_image?userid={{author_id}}">
+        <img class="profile-image post_profile"
+            src="{{base_url}}/api/get_profile_image?userid={{author_id}}">
         <div class="post_section">
             <div class="post_author">
-                <label><a href="{{base_url}}/profile/{{username}}" id="name_{{post_id}}">{{username}}</a></label>
+                <label><a href="{{base_url}}/profile/{{username}}"
+                        id="name_{{post_id}}">{{username}}</a></label>
                 <p class="post-content">{{content}}</p>
             </div>
-            <img class="post_media" src="{{base_url}}/api/get_image?file={{post_id}}"
+            <img class="post_media"
+                src="{{base_url}}/api/get_image?file={{post_id}}"
                 alt="media" onerror="this.style.display='none'">
             <div class="post_actions">
 
@@ -27,6 +30,13 @@
 
             </div>
         </div>
-        <button class="post_edit">Edit</button>
+        <button class="post_edit">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-pencil"><path
+                    d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path
+                    d="m15 5 4 4" /></svg>
+        </button>
     </div>
 </div>

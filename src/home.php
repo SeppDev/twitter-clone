@@ -27,11 +27,11 @@ if (!$user) {
 </head>
 
 <body>
-    
+
     <dialog id="post-dialog">
         <div>
             <textarea placeholder="I like fortnite" class="post-content-input" id="post-text-input"></textarea>
-            
+
             <div class="post-options">
                 <div>
                     <input type="file" accept="image/*" id="post-image-input">
@@ -42,16 +42,16 @@ if (!$user) {
     </dialog>
     <dialog id="edit-dialog">
         <div>
-             <textarea placeholder="I like fortnite" class="post-content-input" id="edit-text-input"></textarea>
-            
+            <textarea placeholder="I like blending cats" class="post-content-input" id="edit-text-input"></textarea>
+
             <div class="post-options">
                 <div>
+                    <button class="action secondary-button" onclick="clearEdit()">Clear</button>
                     <input type="file" accept="image/*" id="edit-image-input">
                 </div>
                 <button class="action primary-button" onclick="edit()">Submit</button>
             </div>
-            
-            <button class="action primary-button" onclick="clearEdit()">Clear</button>
+
         </div>
     </dialog>
 
