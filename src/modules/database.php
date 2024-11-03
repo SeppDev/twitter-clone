@@ -297,7 +297,7 @@ function getUsers()
 
 class tweet
 {
-    readonly int $authorId;
+    public int $authorId;
     public string $content;
     function __construct($content, $authorId)
     {
