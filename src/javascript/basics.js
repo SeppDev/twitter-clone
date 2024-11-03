@@ -1,12 +1,11 @@
 const baseUrl = new URL("https://localhost/twitter-clone/");
 
-document.querySelectorAll("textarea").forEach(function (textarea) {
-    textarea.style.height = "1rem";
+function changeSize(element) {
+    console.log("Hello")
+    element.style.height = "auto";
+    element.style.height = element.scrollHeight + "px";
+}
 
-    textarea.addEventListener("input", function () {
-        this.style.height = "auto"
-        this.style.height = this.scrollHeight + "px";
-
-        console.log("edited")
-    });
-});
+for (textarea of document.getElementsByClassName("post-content-input")) {
+    textarea.addEventListener("input", () => { changeSize(textarea) });
+}

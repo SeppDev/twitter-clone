@@ -30,21 +30,6 @@ dialog>div {
     flex-direction: column;
 }
 
-dialog>div>input[type=file] {
-    cursor: pointer;
-    font-size: 1rem;
-    content: 'Select some files';
-    
-    
-}
-dialog>div>input[type=file]::before {
-    background-color: red;
-}
-
-textarea {
-    transition-duration: 500ms;
-}
-
 .post-options {
     display: flex;
     flex-direction: row;
@@ -63,6 +48,7 @@ textarea {
     font-size: 1.2rem;
     resize: none;
     overflow-y: scroll;
+    min-height: 2rem;
     max-height: 200px;
     width: 100%;
 }
