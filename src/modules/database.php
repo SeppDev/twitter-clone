@@ -282,18 +282,18 @@ function postLikes(int $postId): int
     return $result["COUNT(*)"];
 }
 
-function getPost($postId): array|null
+function getPost(int $postId): tweet|null
 {
     $connection = $GLOBALS["database"];
-    $query = $connection->prepare("SELECT * FROM `posts` WHERE id LIKE ?");
+    $query = $connection->prepare("SELECT `author`, `content` FROM `posts` WHERE id LIKE ?");
     $query->bindParam(1, $postId, PDO::PARAM_INT);
     $query->execute();
 
     $result = $query->fetch(PDO::FETCH_ASSOC);
     if (!$result) {
-        return [];
+        return null;
     }
-    return $result;
+    return new tweet($result["content"], $result["author"]);
 }
 
 function getUsers()
@@ -306,8 +306,8 @@ function getUsers()
 
 class tweet
 {
-    private int $authorId;
-    private string $content;
+    public int $authorId;
+    public string $content;
     function __construct($content, $authorId)
     {
         $this->content = $content;

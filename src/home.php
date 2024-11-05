@@ -20,8 +20,8 @@ if (!$user) {
     <link rel="stylesheet" href="styles/home.css">
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
 
-    <script src="javascript/basics.js"></script>
-    <script src="javascript/logout.js"></script>
+    <script defer src="javascript/logout.js"></script>
+    <script defer src="javascript/basics.js"></script>
     <script defer src="javascript/post.js"></script>
     <script defer src="javascript/posts.js"></script>
     <script defer src="javascript/edit.js"></script>
@@ -29,23 +29,34 @@ if (!$user) {
 </head>
 
 <body>
+
     <dialog id="post-dialog">
         <div>
-            <input type="text" placeholder="I like fortnite!" id="post-text-input">
-            <input type="file" accept="image/*" id="post-image-input">
+            <textarea placeholder="I like fortnite" class="post-content-input" id="post-text-input"></textarea>
 
-            <button class="action primary-button" onclick="post()">Post</button>
+            <div class="post-options">
+                <div>
+                    <input type="file" accept="image/*" id="post-image-input">
+                </div>
+                <button class="action primary-button" onclick="post()">Post</button>
+            </div>
         </div>
     </dialog>
     <dialog id="edit-dialog">
         <div>
-            <input type="text" placeholder="I like blending cats!" id="edit-text-input">
-            <input type="file" placeholder="none" id="edit-image-input">
+            <textarea placeholder="I like blending cats" class="post-content-input" id="edit-text-input"></textarea>
 
-            <button class="edit_button action primary-button" onclick="edit()">Submit</button>
-            <button onclick="clearEdit()">clear</button>
+            <div class="post-options">
+                <div>
+                    <button class="action secondary-button" onclick="clearEdit()">Clear</button>
+                    <input type="file" accept="image/*" id="edit-image-input">
+                </div>
+                <button class="action primary-button" onclick="edit()">Submit</button>
+            </div>
+
         </div>
     </dialog>
+
     <div id="containers">
         <div id="actions">
             <button class="action primary-button" onclick="openPostDialog()">Post</button>
