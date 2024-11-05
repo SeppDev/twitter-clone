@@ -1,4 +1,3 @@
-
 .container {
     max-width: 800px;
     height: 100%
@@ -32,6 +31,10 @@
     flex-direction: column;
     gap: 8px;
     width: 300px;
+}
+
+#logins>button {
+    width: 100% !important
 }
 
 #logo-container {
@@ -74,9 +77,10 @@
     padding-left: 12px;
     transition-duration: 500ms;
 }
-.input-field:focus{
-    background-color: rgb(30,30,30);
-    box-shadow: 0px 0px 2px 1px rgba(255,255,255,0.5);
+
+.input-field:focus {
+    background-color: rgb(30, 30, 30);
+    box-shadow: 0px 0px 2px 1px rgba(255, 255, 255, 0.5);
 }
 
 #or {
@@ -104,4 +108,3 @@
     color: rgb(95, 95, 95);
     font-weight: lighter;
 }
-
