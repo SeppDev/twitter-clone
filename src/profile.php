@@ -1,5 +1,12 @@
 <?php
 require "modules/database.php";
+
+$username = $_GET["username"];
+$user = getUserByName($username);
+if (empty($user)) {
+    die("User not found");
+}
+$currentUser = getUserSession();
 ?>
 
 <!DOCTYPE html>
@@ -10,30 +17,39 @@ require "modules/database.php";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../styles/profile.css">
     <link rel="stylesheet" type="text/css" href="../styles/basic.css">
-    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 
+    <script defer src="../javascript/delete.js"></script>
+    <script defer src="../javascript/edit.js"></script>
     <script defer src="../javascript/basics.js"></script>
     <script defer src="../javascript/posts.js"></script>
     <title>Chirpify</title>
 </head>
 
 <body>
+    <?php
+
+    
+    echo '<script defer src="../javascript/edit_profile.js"></script>';
+    
+    if ($currentUser->userName == $username) {
+        echo readRelativeFile("/components/edit_pfp_dialog.html");
+    }
+    echo readRelativeFile("/components/edit_dialog.html");
+
+    ?>
+
     <div id="page">
         <div id="profilepage">
             <div id="profile">
                 <div class="banner">
                     <?php
-                    $username = $_GET["username"];
-                    $user = getUserByName($username);
-                    if (empty($user)) {
-                        die("User not found");
-                    }
 
                     echo "<img class='img-banner' src='../api/get_profile_image?userid=$user->id'>";
                     ?>
 
 
-                    <button onclick="yes()" id="profile-image-container">
+                    <button id="profile-image-container">
                         <?php
                         echo "<img class='profile-image' src='../api/get_profile_image?userid=$user->id'>";
                         ?>

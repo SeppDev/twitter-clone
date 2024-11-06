@@ -42,20 +42,10 @@ if (!$user) {
             </div>
         </div>
     </dialog>
-    <dialog id="edit-dialog">
-        <div>
-            <textarea placeholder="I like blending cats" class="post-content-input" id="edit-text-input"></textarea>
 
-            <div class="post-options">
-                <div>
-                    <button class="action secondary-button" onclick="clearEdit()">Clear</button>
-                    <input type="file" accept="image/*" id="edit-image-input">
-                </div>
-                <button class="action primary-button" onclick="edit()">Submit</button>
-            </div>
-
-        </div>
-    </dialog>
+    <?php
+    echo readRelativeFile("/components/edit_dialog.html");
+    ?>
 
     <div id="containers">
         <div id="actions">
