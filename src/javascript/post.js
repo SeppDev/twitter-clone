@@ -26,7 +26,6 @@ async function post() {
             return;
         }
     } catch {}
-    
     const postElement = createElementFromHTML(text);
     posts.insertBefore(postElement, posts.firstChild);
     postDialog.open = false;

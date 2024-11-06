@@ -332,7 +332,7 @@ class tweet
         $postId = $connection->lastInsertId();
         $user = getUserById($this->authorId);
 
-        echo buildPost($this->authorId, $user->userName, $this->content, $postId, false, postLikes($postId));
+        echo buildPost($this->authorId, $user->userName, $this->content, $postId, false, postLikes($postId), true, "post");
     }
 }
 
@@ -341,7 +341,7 @@ function fetchTweets(int|null $authorId): void
     $connection = $GLOBALS["database"];
     $currentUser = getUserSession();
 
-    $query = $connection->prepare("SELECT * FROM `posts` ORDER BY id DESC");
+    $query = $connection->prepare("SELECT * FROM `posts` WHERE `is_reply` IS NULL ORDER BY id DESC");
     if (isset($authorId)) {
         $query = $connection->prepare("SELECT * FROM `posts` WHERE author LIKE ? ORDER BY id DESC");
         $query->bindParam(1, $authorId, PDO::PARAM_INT);
@@ -359,8 +359,35 @@ function fetchTweets(int|null $authorId): void
         } else {
             $authorized = false;
         }
-        echo buildPost($author->id, $author->userName, $content, $postId, $likeStatus, postLikes($postId), $authorized);
+        echo buildPost($author->id, $author->userName, $content, $postId, $likeStatus, postLikes($postId), $authorized, "post");
     }
+}
+
+function fetchComments(int $postId)
+{
+    $connection = $GLOBALS["database"];
+    $currentUser = getUserSession();
+    $comments = "";
+
+    $query = $connection->prepare("SELECT * FROM `posts` WHERE `is_reply` = ? ORDER BY id DESC");
+    $query->bindParam(1, $postId, PDO::PARAM_INT);
+    $query->execute();
+
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($result as $post) {
+        $author = getUserById($post["author"]);
+        $commentId = $post["id"];
+        $likeStatus = likeStatus($postId, $currentUser->id);
+        $content = $post["content"];
+
+        if ($author->userName == $currentUser->userName) {
+            $authorized = true;
+        } else {
+            $authorized = false;
+        }
+        $comments = $comments . buildPost($author->id, $author->userName, $content, $commentId, $likeStatus, postLikes($postId), $authorized, "comment");
+    }
+    return $comments;
 }
 function getPostImage(int $postId): string|null
 {
