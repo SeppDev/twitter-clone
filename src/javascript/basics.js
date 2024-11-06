@@ -1,4 +1,4 @@
-const baseUrl = new URL("https://localhost/twitter-clone/");
+const baseUrl = new URL("https://localhost/twitter-clone");
 
 function changeSize(element) {
     element.style.height = "auto";

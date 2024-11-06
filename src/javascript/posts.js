@@ -8,7 +8,7 @@ function checkPostStatus(likeButton, status, likesCountLabel, likes) {
 async function likePost(likeButton, postId, currentStatus, likesCountlabel, likes) {
     checkPostStatus(likeButton, currentStatus == false, likesCountlabel, likes);
 
-    const response = await fetch(baseUrl + "api/like", {
+    const response = await fetch(`${baseUrl}/api/like`, {
         method: "POST",
         headers: {
             postId: postId,
@@ -37,7 +37,6 @@ function handlePost(post) {
     const buttons = post.getElementsByClassName("buttons")[0];
     const postDelete = buttons.getElementsByClassName("post_delete")[0];
 
-    
     const postId = post.getAttribute("post_id");
     let likeStatus = post.getAttribute("status") == "true";
     let likes = parseInt(likesCountLabel.innerText);

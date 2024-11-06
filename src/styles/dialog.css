@@ -33,6 +33,7 @@ dialog>div {
 .post-options {
     display: flex;
     flex-direction: row;
+    gap: 10px;
 }
 .post-options>div {
     flex-grow: 1;

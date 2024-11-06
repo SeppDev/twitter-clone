@@ -1,13 +1,13 @@
 const editDialog = document.getElementById("edit-dialog");
-let editTextInput = document.getElementById("edit-text-input");
-let editImageInput = document.getElementById("edit-image-input");
-let username;
+const editTextInput = document.getElementById("edit-text-input");
+const editImageInput = document.getElementById("edit-image-input");
 let OldpostElement;
+
 function openEditDialog(post, content) {
+    editDialog.open = true;
     editTextInput.value = content;
     OldpostElement = post;
-    username = document.getElementById(`name_${post.getAttribute("post_id")}`).innerText;
-    editDialog.open = true;
+    changeSize(editTextInput);
 }
 
 function clearEdit() {
@@ -19,7 +19,6 @@ async function edit() {
     let formData = new FormData();
     formData.append("content", editTextInput.value);
     formData.append("postId", OldpostElement.getAttribute("post_id"));
-    formData.append("username", username);
     formData.append("image", editImageInput.files[0]);
     const response = await fetch(`${baseUrl}/api/edit`, {
          method: "POST",
@@ -37,6 +36,7 @@ async function edit() {
     const postImage = OldpostElement.getElementsByClassName("post_media")[0];
     const content = OldpostElement.getElementsByClassName("post-content")[0];
     content.innerText = editTextInput.value;
+    
     const blob = new Blob([editImageInput.files[0]], {type: "image/png"})
     postImage.src = URL.createObjectURL(blob)
     postImage.onload = () => URL.revokeObjectURL(postImage.src);
@@ -44,3 +44,8 @@ async function edit() {
     editTextInput.value = "";
     editDialog.open = false;
 }
+
+console.log(editDialog.getElementsByClassName("dialog-cancel"));
+// editDialog.getElementsByClassName("dialog-cancel")[0].onclick = () => {
+//     editDialog.open = false;
+// }

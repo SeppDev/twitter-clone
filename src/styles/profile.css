@@ -7,10 +7,6 @@
     /* margin: 10px; */
 }
 
-#posts {
-    /*background-color: rgb(28, 45, 58);*/
-}
-
 #profilepage {
     display: flex;
     flex-direction: column;
