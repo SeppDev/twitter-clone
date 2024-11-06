@@ -26,6 +26,7 @@ if (!$user) {
     <script defer src="javascript/posts.js"></script>
     <script defer src="javascript/edit.js"></script>
     <script defer src="javascript/delete.js"></script>
+    <script defer src="javascript/home.js"></script>
 </head>
 
 <body>
@@ -50,7 +51,14 @@ if (!$user) {
     <div id="containers">
         <div id="actions">
             <button class="action primary-button" onclick="openPostDialog()">Post</button>
+            <!-- <button class="action primary-button" onclick="openProfilePage()">Profile</button> -->
             <button class="action primary-button" onclick="logout()">Logout</button>
+            <button class="action" id="profile-button" onclick="openProfilePage()">
+                <img class="profile-img" src="<?php
+                    echo "https://localhost/twitter-clone/api/get_profile_image"
+                ?>">
+                Profile
+            </button>
         </div>
         <main id="posts">
             <?php
