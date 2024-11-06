@@ -57,7 +57,9 @@ if (!$user) {
                 <img class="profile-img" src="<?php
                     echo "https://localhost/twitter-clone/api/get_profile_image"
                 ?>">
-                Profile
+                <?php
+                echo $currentUser->userName;
+                ?>
             </button>
         </div>
         <main id="posts">
