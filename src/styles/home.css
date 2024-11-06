@@ -28,6 +28,18 @@
     aspect-ratio: 1;
 }
 
+#profile-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+#profile-button>img {
+    height: 120%;
+    border-radius: 1000px;
+}
+
 /* DESKTOP */
 @media only screen and (min-width: 700px) {
     #containers {
@@ -35,13 +47,18 @@
         position: relative;
         /* height: fit-content; */
     }
+
     #actions {
+        display: flex;
         position: sticky;
         flex-direction: column;
+        justify-content: right;
+        width: 100px;
     }
+
     #posts {
         /* height: max; */
-        max-width: 600px;
+        width: 600px;
         overflow-y: visible;
     }
 }

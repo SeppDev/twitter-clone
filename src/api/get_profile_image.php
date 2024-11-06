@@ -1,8 +1,5 @@
 <?php
 require "../modules/database.php";
-
-$userId = isset($_GET["userid"]) ? $_GET["userid"] : readRelativeFile("../images/defaultpfp.jpeg");
-
 function getProfileImage(int $userId): string
 {
     $connection = $GLOBALS["database"];
@@ -17,4 +14,9 @@ function getProfileImage(int $userId): string
     return readRelativeFile("images/defaultpfp.jpeg");
 }
 
-echo getProfileImage($userId);
+if (isset($_GET["userid"])) {
+    echo getProfileImage($_GET["userid"]);
+} else {
+    $currentUser = getUserSession();
+    echo getProfileImage($currentUser->id);
+}
