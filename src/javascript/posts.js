@@ -29,15 +29,18 @@ async function likePost(likeButton, postId, currentStatus, likesCountlabel, like
     return json.result;
 }
 
+
+
 function handlePost(post) {
     const likeButton = post.getElementsByClassName("post_like_button")[0];
     const likesCountLabel = post.getElementsByClassName("post_likes")[0];
     const editButton = post.getElementsByClassName("post_edit")[0];
-    const postContent =  post.getElementsByClassName("post-content")[0].innerText;
+    const postContent = post.getElementsByClassName("post-content")[0];
     const buttons = post.getElementsByClassName("buttons")[0];
-    const postDelete = buttons.getElementsByClassName("post_delete")[0];
+    const postDelete = post.getElementsByClassName("post_delete")[0];
+    const showComments = post.getElementsByClassName("show_comments")[0];
+    const comments = post.getElementsByClassName("comments")[0];
 
-    
     const postId = post.getAttribute("post_id");
     let likeStatus = post.getAttribute("status") == "true";
     let likes = parseInt(likesCountLabel.innerText);
@@ -60,6 +63,18 @@ function handlePost(post) {
     postDelete.onclick = async () => {
         await deletePost(post);
     };
+
+    showComments.onclick = () => {
+        if (!comments.open) {
+            comments.open = true;
+        } else {
+            comments.open = false;
+        }
+    }
+
+    if (buttons.getAttribute("authorized") == "false") {
+        buttons.style.display = "none";
+    }
 }
 
 const posts = document.getElementById("posts");
@@ -71,7 +86,10 @@ const observer = new MutationObserver((list, _) => {
     handlePost(post);
 });
 observer.observe(posts, { childList: true })
-
-for (let child of posts.children) {
+for (child of posts.children) {
     handlePost(child);
+    let comments = child.getElementsByClassName("post");
+    for (let i = 0; i<comments.length; i++) {
+        handlePost(comments[i])
+    }
 }

@@ -12,8 +12,12 @@ require "modules/database.php";
     <link rel="stylesheet" type="text/css" href="../styles/basic.css">
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
 
-    <script defer src="../javascript/basics.js"></script>
-    <script defer src="../javascript/posts.js"></script>
+    <script src="javascript/basics.js"></script>
+    <script src="javascript/logout.js"></script>
+    <script defer src="javascript/post.js"></script>
+    <script defer src="javascript/posts.js"></script>
+    <script defer src="javascript/edit.js"></script>
+    <script defer src="javascript/delete.js"></script>
     <title>Chirpify</title>
 </head>
 

@@ -2,7 +2,8 @@ async function deletePost(post) {
     let username = document.getElementById(`name_${post.getAttribute("post_id")}`).innerText;
     let postId = post.getAttribute("post_id");
     let formData = new FormData();
-    let main = document.getElementById("posts");
+    let parent = post.parentElement;
+    console.log(parent);
     formData.append("username", username);
     formData.append("post_id", postId);
 
@@ -15,6 +16,6 @@ async function deletePost(post) {
         alert(json.error);
         return;
     }
-    main.removeChild(post);
+    parent.removeChild(post);
     alert(json.success);
 }

@@ -1,4 +1,4 @@
-<div class="post" status="{{like_status}}" post_id="{{post_id}}" id="post_{{post_id}}">
+<div class="post" status="{{like_status}}" post_id="{{post_id}}">
     <div class="post_inner">
         <img class="profile-image post_profile" src="{{base_url}}/api/get_profile_image?userid={{author_id}}">
         <div class="post_section">
@@ -9,10 +9,8 @@
             <img class="post_media" src="{{base_url}}/api/get_image?file={{post_id}}"
                 alt="media" onerror="this.style.display='none'">
             <div class="post_actions">
-
                 <div class="post_like">
-                    <button
-                        class="post_like_button">
+                    <button class="post_like_button">
                         <div class="post_like_hover"></div>
                         <svg width="24"
                             height="24"
@@ -24,19 +22,15 @@
                     </button>
                     <label class="post_likes">{{like_count}}</label>
                 </div>
-
+                <button class="show_comments">↑↓</button>
             </div>
         </div>
         <div class="buttons" authorized="{{authorized}}">
             <button class="post_edit">Edit</button>
             <button class="post_delete">Delete</button>
         </div>
-        <script>
-            postElement = document.getElementById("post_{{post_id}}");
-            buttons = postElement.getElementsByClassName("buttons")[0];
-            if (buttons.getAttribute("authorized") == "false") {
-                buttons.style.display = "none";
-            }
-        </script>
     </div>
+    <dialog class="comments">
+        {{get_comments}}
+    </dialog>
 </div>

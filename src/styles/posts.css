@@ -2,6 +2,7 @@
     width: 100%;
     position: relative;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -89,6 +90,8 @@
     z-index: 1;
 }
 
+
+
 .post_like_hover {
     position: absolute;
     background-color: rgba(255, 0, 0, 0);
@@ -123,6 +126,13 @@
     color: rgba(255, 0, 0, 0);
     stroke: rgb(141, 141, 141);
     transition-duration: 300ms;
+}
+
+.comments {
+    width: 50%;
+    height: 50%;
+    flex-direction: row;
+    position: relative;
 }
 
 @keyframes heart_beep {

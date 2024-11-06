@@ -19,7 +19,6 @@ async function edit() {
     let formData = new FormData();
     formData.append("content", editTextInput.value);
     formData.append("postId", OldpostElement.getAttribute("post_id"));
-    formData.append("username", username);
     formData.append("image", editImageInput.files[0]);
     const response = await fetch(`${baseUrl}/api/edit`, {
          method: "POST",
