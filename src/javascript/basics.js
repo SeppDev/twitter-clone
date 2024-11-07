@@ -1,7 +1,4 @@
 const baseUrl = new URL("https://localhost/twitter-clone/");
-<<<<<<< Updated upstream
-let commentV;
-=======
 let selectedElement;
 
 function changeSize(element) {
@@ -12,4 +9,3 @@ function changeSize(element) {
 for (textarea of document.getElementsByClassName("post-content-input")) {
     textarea.addEventListener("input", (a) => { changeSize(a.target) });
 }
->>>>>>> Stashed changes

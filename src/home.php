@@ -37,17 +37,6 @@ if (!$user) {
             <button class="action primary-button" onclick="post()">Post</button>
         </div>
     </dialog>
-<<<<<<< Updated upstream
-    <dialog id="edit-dialog">
-        <div>
-            <input type="text" placeholder="I like blending cats!" id="edit-text-input">
-            <input type="file" placeholder="none" id="edit-image-input">
-
-            <button class="edit_button action primary-button" onclick="edit()">Submit</button>
-            <button onclick="clearEdit()">clear</button>
-        </div>
-    </dialog>
-=======
     <dialog id="reply-dialog">
         <div>
             <textarea placeholder="I like splattering brains!" class="post-content-input" id="post-text-reply-input"></textarea>
@@ -66,7 +55,6 @@ if (!$user) {
 
     ?>
 
->>>>>>> Stashed changes
     <div id="containers">
         <div id="actions">
             <button class="action primary-button" onclick="openPostDialog()">Post</button>
