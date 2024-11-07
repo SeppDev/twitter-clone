@@ -20,8 +20,8 @@ if (!$user) {
     <link rel="stylesheet" href="styles/home.css">
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
 
-    <script defer src="javascript/logout.js"></script>
     <script defer src="javascript/basics.js"></script>
+    <script defer src="javascript/logout.js"></script>
     <script defer src="javascript/post.js"></script>
     <script defer src="javascript/posts.js"></script>
     <script defer src="javascript/edit.js"></script>
@@ -39,6 +39,7 @@ if (!$user) {
                 <div>
                     <input type="file" accept="image/*" id="post-image-input">
                 </div>
+                <button class="action secondary-button dialog-close">Cancel</button>
                 <button class="action primary-button" onclick="post()">Post</button>
             </div>
         </div>
@@ -57,7 +58,9 @@ if (!$user) {
                 <img class="profile-img" src="<?php
                     echo "https://localhost/twitter-clone/api/get_profile_image"
                 ?>">
-                Profile
+                <?php
+                echo $currentUser->userName;
+                ?>
             </button>
         </div>
         <main id="posts">

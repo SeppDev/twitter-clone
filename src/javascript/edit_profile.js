@@ -11,7 +11,8 @@ pfpInput.addEventListener("change", async () => {
         method: "POST",
         body: formData
     })
-    window.location.reload();
+    
+    
 })
 
 const profileEditButton = document.getElementById("profile-image-container");

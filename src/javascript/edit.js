@@ -1,13 +1,13 @@
 const editDialog = document.getElementById("edit-dialog");
-let editTextInput = document.getElementById("edit-text-input");
-let editImageInput = document.getElementById("edit-image-input");
-let username;
+const editTextInput = document.getElementById("edit-text-input");
+const editImageInput = document.getElementById("edit-image-input");
 let OldpostElement;
+
 function openEditDialog(post, content) {
+    editDialog.open = true;
     editTextInput.value = content;
     OldpostElement = post;
-    username = document.getElementById(`name_${post.getAttribute("post_id")}`).innerText;
-    editDialog.open = true;
+    changeSize(editTextInput);
 }
 
 function clearEdit() {
@@ -36,10 +36,23 @@ async function edit() {
     const postImage = OldpostElement.getElementsByClassName("post_media")[0];
     const content = OldpostElement.getElementsByClassName("post-content")[0];
     content.innerText = editTextInput.value;
+    
     const blob = new Blob([editImageInput.files[0]], {type: "image/png"})
     postImage.src = URL.createObjectURL(blob)
     postImage.onload = () => URL.revokeObjectURL(postImage.src);
-    editImageInput.value = "";
+    editImageInput.value = null;
     editTextInput.value = "";
     editDialog.open = false;
 }
+
+const dialogs = document.querySelectorAll("dialog");
+dialogs.forEach((dialog) => {
+    const cancelButton = dialog.getElementsByClassName("dialog-close")[0];
+    if (!cancelButton) {
+        return;
+    }
+
+    cancelButton.onclick = () => {
+        dialog.open = false;
+    }
+})
