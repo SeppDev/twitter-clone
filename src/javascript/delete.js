@@ -3,7 +3,6 @@ async function deletePost(post) {
     let postId = post.getAttribute("post_id");
     let formData = new FormData();
     let parent = post.parentElement;
-    console.log(parent);
     formData.append("username", username);
     formData.append("post_id", postId);
 

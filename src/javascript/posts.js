@@ -40,6 +40,8 @@ function handlePost(post) {
     const postDelete = post.getElementsByClassName("post_delete")[0];
     const showComments = post.getElementsByClassName("show_comments")[0];
     const comments = post.getElementsByClassName("comments")[0];
+    const replyButton = post.getElementsByClassName("post_reply")[0];
+    const replyDialog = document.getElementById("reply-dialog");
 
     const postId = post.getAttribute("post_id");
     let likeStatus = post.getAttribute("status") == "true";
@@ -73,7 +75,13 @@ function handlePost(post) {
     }
 
     if (buttons.getAttribute("authorized") == "false") {
-        buttons.style.display = "none";
+        editButton.style.display = "none";
+        postDelete.style.display = "none";
+    }
+
+    replyButton.onclick = () => {
+        replyDialog.open = true;
+        selectedElement = post;
     }
 }
 
@@ -89,6 +97,9 @@ observer.observe(posts, { childList: true })
 for (child of posts.children) {
     handlePost(child);
     let comments = child.getElementsByClassName("post");
+    if (!comments) {
+        continue;
+    }
     for (let i = 0; i<comments.length; i++) {
         handlePost(comments[i])
     }
