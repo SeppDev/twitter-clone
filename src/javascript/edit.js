@@ -40,12 +40,19 @@ async function edit() {
     const blob = new Blob([editImageInput.files[0]], {type: "image/png"})
     postImage.src = URL.createObjectURL(blob)
     postImage.onload = () => URL.revokeObjectURL(postImage.src);
-    editImageInput.value = "";
+    editImageInput.value = null;
     editTextInput.value = "";
     editDialog.open = false;
 }
 
-console.log(editDialog.getElementsByClassName("dialog-cancel"));
-// editDialog.getElementsByClassName("dialog-cancel")[0].onclick = () => {
-//     editDialog.open = false;
-// }
+const dialogs = document.querySelectorAll("dialog");
+dialogs.forEach((dialog) => {
+    const cancelButton = dialog.getElementsByClassName("dialog-close")[0];
+    if (!cancelButton) {
+        return;
+    }
+
+    cancelButton.onclick = () => {
+        dialog.open = false;
+    }
+})

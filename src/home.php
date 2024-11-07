@@ -39,7 +39,7 @@ if (!$user) {
                 <div>
                     <input type="file" accept="image/*" id="post-image-input">
                 </div>
-                <button class="action secondary-button" class="dialog-cancel">Cancel</button>
+                <button class="action secondary-button dialog-close">Cancel</button>
                 <button class="action primary-button" onclick="post()">Post</button>
             </div>
         </div>
