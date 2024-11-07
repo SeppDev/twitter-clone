@@ -23,7 +23,8 @@ async function edit() {
     const response = await fetch(`${baseUrl}/api/edit`, {
          method: "POST",
          body: formData
-     });
+    });
+    
     let html = await response.text();
     try {
         const json = JSON.parse(html);
@@ -32,7 +33,8 @@ async function edit() {
             editDialog.open = false;
             return;
         }
-    } catch {}
+    } catch { }
+    
     const postImage = OldpostElement.getElementsByClassName("post_media")[0];
     const content = OldpostElement.getElementsByClassName("post-content")[0];
     content.innerText = editTextInput.value;
@@ -45,7 +47,14 @@ async function edit() {
     editDialog.open = false;
 }
 
-console.log(editDialog.getElementsByClassName("dialog-cancel"));
-// editDialog.getElementsByClassName("dialog-cancel")[0].onclick = () => {
-//     editDialog.open = false;
-// }
+const dialogs = document.querySelectorAll("dialog");
+dialogs.forEach((dialog) => {
+    const cancelButton = dialog.getElementsByClassName("dialog-close")[0];
+    if (!cancelButton) {
+        return;
+    }
+
+    cancelButton.onclick = () => {
+        dialog.open = false;
+    }
+})

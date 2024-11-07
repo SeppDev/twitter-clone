@@ -1,6 +1,6 @@
-let postDialog = document.getElementById("post-dialog");
 
 async function openPostDialog() {
+    const postDialog = document.getElementById("post-dialog");
     postDialog.open = true;
 }
 
@@ -9,8 +9,11 @@ const postImageInput = document.getElementById("post-image-input");
 const replyTextInput = document.getElementById("post-text-reply-input");
 const replyImageInput = document.getElementById("post-image-reply-input");
 const replyDialog = document.getElementById("reply-dialog");
-postTextInput.value = null;
-postImageInput.value = null;
+
+if (postTextInput && postImageInput) {
+    postTextInput.value = null;
+    postImageInput.value = null;
+}
 
 async function post(element = null) {
     let formData = new FormData();
@@ -34,7 +37,8 @@ async function post(element = null) {
             alert(json.error);
             return;
         }
-    } catch {}
+    } catch { }
+    const postDialog = document.getElementById("post-dialog");
     const postElement = createElementFromHTML(text);
     let parent;
     if (element) {

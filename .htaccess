@@ -5,7 +5,7 @@ RewriteRule ^src/(modules)(/|$) - [F,L]
 RewriteCond %{REQUEST_FILENAME}\.php -f
 RewriteRule ^(.*)$ $1.php [NC,L] 
 
-RewriteRule ^profile/([a-z]+)/?$    profile.php?username=$1    [NC,L]  
+RewriteRule ^profile/(.*)/?$    profile.php?username=$1    [NC,L]  
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
