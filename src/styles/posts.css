@@ -131,7 +131,7 @@
 .comments {
     width: 50%;
     height: 50%;
-    flex-direction: row;
+    flex-direction: column;
     position: relative;
 }
 

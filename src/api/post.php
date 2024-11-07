@@ -11,6 +11,10 @@ if (!$user) {
 if (!$content) {
     build_error("No content");
 }
-
 $tweet = new tweet($content, $user->id);
-$tweet->post();
+if (isset($_POST["post_id"])) {
+    $post_id = $_POST["post_id"];
+    $tweet->post($post_id);
+} else {
+    $tweet->post(null);
+}

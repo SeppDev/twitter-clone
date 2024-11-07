@@ -37,6 +37,7 @@ if (!$user) {
             <button class="action primary-button" onclick="post()">Post</button>
         </div>
     </dialog>
+<<<<<<< Updated upstream
     <dialog id="edit-dialog">
         <div>
             <input type="text" placeholder="I like blending cats!" id="edit-text-input">
@@ -46,6 +47,26 @@ if (!$user) {
             <button onclick="clearEdit()">clear</button>
         </div>
     </dialog>
+=======
+    <dialog id="reply-dialog">
+        <div>
+            <textarea placeholder="I like splattering brains!" class="post-content-input" id="post-text-reply-input"></textarea>
+
+            <div class="post-options">
+                <div>
+                    <input type="file" accept="image/*" id="post-image-reply-input">
+                </div>
+                <button class="action primary-button" id="reply-button" onclick="post(selectedElement)">Post</button>
+            </div>
+        </div>
+    </dialog>
+
+    <?php
+    echo readRelativeFile("/components/edit_dialog.html");
+
+    ?>
+
+>>>>>>> Stashed changes
     <div id="containers">
         <div id="actions">
             <button class="action primary-button" onclick="openPostDialog()">Post</button>

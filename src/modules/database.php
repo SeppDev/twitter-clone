@@ -247,7 +247,7 @@ function editTweet(int $postId, string $content)
 function deleteTweet(int $postId)
 {
     $connection = $GLOBALS["database"];
-    $query = $connection->prepare("DELETE FROM posts WHERE id LIKE ?");
+    $query = $connection->prepare("DELETE FROM `posts` WHERE id LIKE ?");
     $query->bindParam(1, $postId, PDO::PARAM_STR);
     $query->execute();
     echo json_encode(array(
@@ -313,10 +313,15 @@ class tweet
         $this->content = $content;
         $this->authorId = $authorId;
     }
-    public function post(): void
+    public function post(int|null $postId): void
     {
         $connection = $GLOBALS["database"];
-        $query = $connection->prepare("INSERT INTO `posts` (`content`, `author`, `image`) VALUES (?, ?, ?)");
+        if ($postId) {
+            $query = $connection->prepare("INSERT INTO `posts` (`content`, `author`, `image`, `is_reply`) VALUES (?, ?, ?, ?)");
+            $query->bindParam(4, $postId, PDO::PARAM_STR);
+        } else {
+            $query = $connection->prepare("INSERT INTO `posts` (`content`, `author`, `image`) VALUES (?, ?, ?)");
+        }
         $query->bindParam(1, $this->content, PDO::PARAM_STR);
         $query->bindParam(2, $this->authorId, PDO::PARAM_INT);
 
