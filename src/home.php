@@ -21,7 +21,6 @@ if (!$user) {
 
     <script src="javascript/logout.js"></script>
     <script defer src="javascript/basics.js"></script>
-    <script defer src="javascript/home.js"></script>
     <script defer src="javascript/post.js"></script>
     <script defer src="javascript/posts.js"></script>
     <script defer src="javascript/edit.js"></script>

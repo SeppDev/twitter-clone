@@ -67,11 +67,12 @@ function handlePost(post) {
         await deletePost(post);
     };
 
+    comments.style.display = "none";
     showComments.onclick = () => {
-        if (!comments.open) {
-            comments.open = true;
+        if (comments.style.display == "none") {
+            comments.style.display = "block";
         } else {
-            comments.open = false;
+            comments.style.display = "none";
         }
     }
 
