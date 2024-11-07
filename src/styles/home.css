@@ -16,7 +16,7 @@
     display: flex;
     height: fit-content;
     flex-direction: row;
-    justify-content: right;
+    justify-content: center;
 }
 
 #posts {
@@ -55,6 +55,7 @@
         position: sticky;
         flex-direction: column;
         justify-content: right;
+        width: 100px;
     }
 
     #posts {

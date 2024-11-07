@@ -1,11 +1,17 @@
- <dialog id="edit-profile">
+<dialog id="edit-profile">
     <div>
         <label>Username</label>
-        <input type="text">
+        <input type="text" id="edit-profile-username" class="post-content-input" placeholder="John Doe">
         <label>Description</label>
-        <input type="text">
+        <textarea id="edit-profile-description" class="post-content-input" placeholder="Description"></textarea>
 
+        <div class="post-options">
+            <button class="action secondary-button dialog-close">Cancel</button>
+            <button class="action primary-button" onclick="editProfile()">Edit</button>
+        </div>
         <label>Profile Image</label>
         <input type="file" accept="image/*" id="edit-pfp-input">
+        <label>Banner</label>
+        <input type="file" accept="image/*" id="edit-pfp-banner-input">
     </div>
 </dialog>

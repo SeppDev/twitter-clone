@@ -1,5 +1,8 @@
 const baseUrl = new URL("https://localhost/twitter-clone/");
-let selectedElement;
+
+function openProfilePage(userId) {
+    window.location = `${baseUrl}/api/profile`
+}
 
 function changeSize(element) {
     element.style.height = "auto";

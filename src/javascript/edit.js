@@ -23,7 +23,8 @@ async function edit() {
     const response = await fetch(`${baseUrl}/api/edit`, {
          method: "POST",
          body: formData
-     });
+    });
+    
     let html = await response.text();
     try {
         const json = JSON.parse(html);
@@ -32,7 +33,8 @@ async function edit() {
             editDialog.open = false;
             return;
         }
-    } catch {}
+    } catch { }
+    
     const postImage = OldpostElement.getElementsByClassName("post_media")[0];
     const content = OldpostElement.getElementsByClassName("post-content")[0];
     content.innerText = editTextInput.value;
@@ -40,7 +42,7 @@ async function edit() {
     const blob = new Blob([editImageInput.files[0]], {type: "image/png"})
     postImage.src = URL.createObjectURL(blob)
     postImage.onload = () => URL.revokeObjectURL(postImage.src);
-    editImageInput.value = null;
+    editImageInput.value = "";
     editTextInput.value = "";
     editDialog.open = false;
 }

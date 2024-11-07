@@ -6,19 +6,17 @@
                 <label><a href="{{base_url}}/profile/{{username}}" id="name_{{post_id}}">{{username}}</a></label>
                 <p class="post-content">{{content}}</p>
             </div>
-            <img class="post_media" src="{{base_url}}/api/get_image?file={{post_id}}"
-                alt="media" onerror="this.style.display='none'">
+            <img class="post_media" src="{{base_url}}/api/get_image?file={{post_id}}" alt="media"
+                onerror="this.style.display='none'">
             <div class="post_actions">
                 <div class="post_like">
                     <button class="post_like_button">
                         <div class="post_like_hover"></div>
-                        <svg width="24"
-                            height="24"
-                            viewBox="0 0 24 24" fill="full"
-                            stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="post_heart_unliked"><path
-                                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" /></svg>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="full" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" class="post_heart_unliked">
+                            <path
+                                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                        </svg>
                     </button>
                     <label class="post_likes">{{like_count}}</label>
                 </div>
@@ -26,9 +24,30 @@
             </div>
         </div>
         <div class="buttons" authorized="{{authorized}}">
-            <button class="post_edit">Edit</button>
-            <button class="post_delete">Delete</button>
-            <button class="post_reply">reply</button>
+            <button class="post_edit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-pencil">
+                    <path
+                        d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+                    <path d="m15 5 4 4" />
+                </svg>
+            </button>
+            <button class="post_reply"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="lucide lucide-reply">
+                    <polyline points="9 17 4 12 9 7" />
+                    <path d="M20 18v-2a4 4 0 0 0-4-4H4" />
+                </svg></button>
+            <button class="post_delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="lucide lucide-trash-2">
+                    <path d="M3 6h18" />
+                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                    <line x1="10" x2="10" y1="11" y2="17" />
+                    <line x1="14" x2="14" y1="11" y2="17" />
+                </svg></button>
         </div>
     </div>
     <dialog class="comments">

@@ -1,3 +1,4 @@
+let selectedElement;
 
 function checkPostStatus(likeButton, status, likesCountLabel, likes) {
     const svg = likeButton.children[1];
@@ -59,7 +60,7 @@ function handlePost(post) {
         awaitingResponse = false;
     }
     editButton.onclick = () => {
-        openEditDialog(post, postContent);
+        openEditDialog(post, postContent.innerText);
     };
 
     postDelete.onclick = async () => {
