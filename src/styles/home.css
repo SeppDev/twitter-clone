@@ -16,7 +16,7 @@
     display: flex;
     height: fit-content;
     flex-direction: row;
-    justify-content: center;
+    justify-content: right;
 }
 
 #posts {
@@ -37,6 +37,8 @@
 
 #profile-button>img {
     height: 120%;
+    aspect-ratio: 1;
+    object-fit: cover;
     border-radius: 1000px;
 }
 
@@ -53,7 +55,6 @@
         position: sticky;
         flex-direction: column;
         justify-content: right;
-        width: 100px;
     }
 
     #posts {

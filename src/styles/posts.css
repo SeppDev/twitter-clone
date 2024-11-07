@@ -36,6 +36,13 @@
     right: 0px;
     top: 0px;
 }
+.buttons>button {
+    background-color: rgba(0,0,0,0);
+}
+
+.post-content {
+    white-space: pre;
+}
 
 .post_author {
     margin-bottom: 8px;
@@ -51,6 +58,7 @@
 .post_author>label {
     font-size: 1.5rem;
 }
+
 .post_author>p {
     margin: 0px;
     margin-top: 4px;
@@ -106,14 +114,18 @@
     background-color: rgba(255, 0, 0, 0.3);
     height: 40px;
 }
+
 .post_like_button:hover>svg {
     stroke: var(--like-color);
 }
 
 .post_heart_liked {
-    fill: var(--like-color);;
-    color: var(--like-color);;
-    stroke: var(--like-color);;
+    fill: var(--like-color);
+    ;
+    color: var(--like-color);
+    ;
+    stroke: var(--like-color);
+    ;
     animation: heart_beep 400ms ease-in-out;
     transition-duration: 300ms;
     position: absolute;
@@ -139,9 +151,11 @@
     0% {
         scale: 1
     }
+
     60% {
         scale: 1.4;
     }
+
     100% {
         scale: 1;
     }
