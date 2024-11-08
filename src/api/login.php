@@ -10,4 +10,8 @@ if (!($username && $password)) {
     build_error("Failed to provide a username or password");
 } 
 
+if (strlen($password) < 8) {
+    build_error("Password is too short");
+}
+
 loginUser($username, $password);
