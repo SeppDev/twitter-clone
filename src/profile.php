@@ -1,6 +1,6 @@
 <?php
 require "modules/database.php";
-
+//gets user data
 $username = $_GET["username"];
 $user = getUserByName($username);
 if (empty($user)) {
@@ -34,7 +34,7 @@ $currentUser = getUserSession();
 
 
     echo '<script defer src="../javascript/edit_profile.js"></script>';
-
+    // checks if user is authorized to moderate these tweets
     if ($currentUser->userName == $username) {
         echo readRelativeFile("/components/edit_pfp_dialog.html");
     }
@@ -48,16 +48,19 @@ $currentUser = getUserSession();
             <div id="profile">
                 <div class="banner">
                     <?php
+                    // gets user banner
                     echo "<img class='img-banner' src='../api/get_profile_banner_image?userid=$user->id'>";
                     ?>
 
                     <button id="profile-image-container">
                         <?php
+                        // gets profile image
                         echo "<img class='profile-image' src='../api/get_profile_image?userid=$user->id'>";
                         ?>
 
                     </button>
                 </div>
+                <!-- gets user information -->
                 <div class="profile-information">
                     <div>
                         <h2 id="profile-username">
@@ -68,13 +71,10 @@ $currentUser = getUserSession();
                         <p id="profile-description"><?php echo $user->description ?></p>
                     </div>
                 </div>
-                <!-- <nav id="profile-navigation">
-                    <button class="navigation-button">Posts</button>
-                    <button class="navigation-button">Liked</button>
-                </nav> -->
             </div>
             <div id="posts">
                 <?php
+                //fetches all tweets from a specific user
                 fetchTweets($user->id);
                 ?>
             </div>

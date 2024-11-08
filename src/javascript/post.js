@@ -1,4 +1,4 @@
-
+//opens post dialog
 async function openPostDialog() {
     const postDialog = document.getElementById("post-dialog");
     postDialog.open = true;
@@ -15,8 +15,10 @@ if (postTextInput && postImageInput) {
     postImageInput.value = null;
 }
 
+//posts either a tweet or reply
 async function post(element = null) {
     let formData = new FormData();
+    //checks if post or reply
     if (element) {
         formData.append("post_id", element.getAttribute("post_id"));
         formData.append("file", replyImageInput.files[0]);
@@ -41,6 +43,7 @@ async function post(element = null) {
     const postDialog = document.getElementById("post-dialog");
     const postElement = createElementFromHTML(text);
     let parent;
+    //checks if post or reply
     if (element) {
         parent = element.children[1];
         replyDialog.open = false;
@@ -51,7 +54,7 @@ async function post(element = null) {
     parent.insertBefore(postElement, parent.firstChild);
     handlePost(parent.firstChild);
 }
-
+//create an element from mere text
 function createElementFromHTML(htmlString) {
     let div = document.createElement('div');
     div.innerHTML = htmlString.trim();

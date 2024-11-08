@@ -1,11 +1,13 @@
 let selectedElement;
 
+//cheks the current status of post
 function checkPostStatus(likeButton, status, likesCountLabel, likes) {
     const svg = likeButton.children[1];
     likesCountLabel.innerText = likes
     svg.className.baseVal = status && "post_heart_liked" || "post_heart_unliked";
 }
 
+//likes post and check if liked
 async function likePost(likeButton, postId, currentStatus, likesCountlabel, likes) {
     checkPostStatus(likeButton, currentStatus == false, likesCountlabel, likes);
 
@@ -31,7 +33,7 @@ async function likePost(likeButton, postId, currentStatus, likesCountlabel, like
 }
 
 
-
+//adds event listeners and checks status
 function handlePost(post) {
     const likeButton = post.getElementsByClassName("post_like_button")[0];
     const likesCountLabel = post.getElementsByClassName("post_likes")[0];
@@ -43,13 +45,11 @@ function handlePost(post) {
     const comments = post.getElementsByClassName("comments")[0];
     const replyButton = post.getElementsByClassName("post_reply")[0];
     const replyDialog = document.getElementById("reply-dialog");
-
     const postId = post.getAttribute("post_id");
     let likeStatus = post.getAttribute("status") == "true";
     let likes = parseInt(likesCountLabel.innerText);
 
     checkPostStatus(likeButton, likeStatus, likesCountLabel, likes);
-
     let awaitingResponse = false;
     likeButton.onclick = async () => {
         if (awaitingResponse == true) {
@@ -87,7 +87,9 @@ function handlePost(post) {
     }
 }
 
+
 const posts = document.getElementById("posts");
+//creates an observer pattern
 const observer = new MutationObserver((list, _) => {
     const post = list[0].addedNodes[0];
     if (!post) {
@@ -96,6 +98,7 @@ const observer = new MutationObserver((list, _) => {
     handlePost(post);
 });
 observer.observe(posts, { childList: true })
+//handles all posts and replies
 for (child of posts.children) {
     handlePost(child);
     let comments = child.getElementsByClassName("post");

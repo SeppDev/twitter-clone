@@ -1,7 +1,9 @@
 <?php
 require "modules/database.php";
+// gets user data
 $user = getUserSession();
 
+// checks if user is logged in, and transfers to login page if not
 if (!$user) {
     header("Location: ./login");
     die();
@@ -43,6 +45,7 @@ if (!$user) {
     </dialog>
 
     <?php
+    // read external html files for re-use
     echo readRelativeFile("/components/edit_dialog.html");
     echo readRelativeFile("/components/reply_dialog.html");
     echo readRelativeFile("/components/edit_dialog.html");
@@ -64,6 +67,7 @@ if (!$user) {
         </div>
         <main id="posts">
             <?php
+            //fetches tweets. All tweets in this case.
             fetchTweets(null);
             ?>
         </main>

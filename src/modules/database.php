@@ -1,8 +1,9 @@
 <?php
-
+// current working directory
 $dir = __DIR__;
 require "$dir/../modules/post_builder.php";
 
+//reads file using path
 function readRelativeFile(string $path): string
 {
     $dir = __DIR__;
@@ -13,7 +14,7 @@ function readRelativeFile(string $path): string
 
     return $content;
 }
-
+//connects to db
 try {
     $GLOBALS["database"] = new PDO("mysql:host=localhost;dbname=twitter_clone", "root", "");
 } catch (Exception $e) {
@@ -21,6 +22,7 @@ try {
 }
 $GLOBALS["post_component"] = readRelativeFile("components/post.html");
 
+//main error throw function
 function build_error(string $message)
 {
     die(json_encode(array(
@@ -28,15 +30,9 @@ function build_error(string $message)
     )));
 }
 
-function sanitize_username(string $userName): string
-{
-    return $userName;
-    // return $userName = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
-}
-
+//creates user and writes to db
 function createUser(string $userName, string $password)
 {
-    $userName = sanitize_username($userName);
     if (strlen($userName) > 20) {
         build_error("Username is too long!");
     }
@@ -63,9 +59,9 @@ function createUser(string $userName, string $password)
     }
 }
 
+//logs user in and writes to db
 function loginUser(string $userName, string $password)
 {
-    $userName = sanitize_username($userName);
     $password_hash = hash("sha256", $password);
     $connection = $GLOBALS["database"];
 
@@ -96,11 +92,13 @@ function loginUser(string $userName, string $password)
     )));
 }
 
+//generates random string
 function randomString(int $length)
 {
     return substr(base64_encode(random_bytes($length + 10)), 0, $length);
 }
 
+//creates a user session and binds login token
 function createUserSession(int $userid): string
 {
     $token = randomString(32);
@@ -113,7 +111,7 @@ function createUserSession(int $userid): string
     return $token;
 }
 
-
+//class for managing user data
 class User
 {
     public int $id;
@@ -124,6 +122,7 @@ class User
 
 }
 
+//get a user by their id
 function getUserById(int $id): User|null
 {
     $connection = $GLOBALS["database"];
@@ -146,7 +145,7 @@ function getUserById(int $id): User|null
     return $object;
 }
 
-
+//get user by name
 function getUserByName(string $userName): User|null
 {
     $connection = $GLOBALS["database"];
@@ -169,6 +168,7 @@ function getUserByName(string $userName): User|null
     return $object;
 }
 
+//verify session token
 function verifySessionToken(string $token): int|null
 {
     $connection = $GLOBALS["database"];
@@ -187,6 +187,7 @@ function verifySessionToken(string $token): int|null
     return $row["id"];
 }
 
+//get token of user session
 function getUserSessionToken(): string|null
 {
     $token = isset($_COOKIE["session_token"]) ? $_COOKIE["session_token"] : null;
@@ -223,6 +224,8 @@ function getUserSession(): User|null
     return $user;
 }
 
+
+//edits tweet. can be used for tweet or reply
 function editTweet(int $postId, string $content)
 {
     $connection = $GLOBALS["database"];
@@ -271,6 +274,7 @@ function likeStatus(int $postId, int $userId): bool
     return false;
 }
 
+//gets post likes
 function postLikes(int $postId): int
 {
     $connection = $GLOBALS["database"];
@@ -296,14 +300,7 @@ function getPost(int $postId): tweet|null
     return new tweet($result["content"], $result["author"]);
 }
 
-function getUsers()
-{
-    $connection = $GLOBALS["database"];
-    $query = $connection->prepare("SELECT * FROM `users`");
-    $query->execute();
-    return $query->fetchAll(PDO::FETCH_ASSOC);
-}
-
+//tweet class. manages tweets and stores data
 class tweet
 {
     public int $authorId;
@@ -313,6 +310,7 @@ class tweet
         $this->content = $content;
         $this->authorId = $authorId;
     }
+    // can be used for post or reply
     public function post(int|null $postId): void
     {
         $connection = $GLOBALS["database"];
@@ -340,7 +338,7 @@ class tweet
         echo buildPost($this->authorId, $user->userName, $this->content, $postId, false, postLikes($postId), true, "post");
     }
 }
-
+//can be used to fetch with a single user
 function fetchTweets(int|null $authorId): void
 {
     $connection = $GLOBALS["database"];
@@ -367,7 +365,7 @@ function fetchTweets(int|null $authorId): void
         echo buildPost($author->id, $author->userName, $content, $postId, $likeStatus, postLikes($postId), $authorized, "post");
     }
 }
-
+//fetches comments
 function fetchComments(int $postId)
 {
     $connection = $GLOBALS["database"];

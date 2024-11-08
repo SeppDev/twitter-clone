@@ -1,5 +1,6 @@
 <?php
 
+//replaces strings in post.html
 function buildPost(int $authorId, string $username, string $content, int $postId, bool $likeStatus, int $likeCount, bool $authorized = true, string $mode) {
     $component = $GLOBALS["post_component"];
 

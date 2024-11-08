@@ -1,6 +1,8 @@
 <?php
 require "modules/database.php";
+// gets user data
 $user = getUserSession();
+// checks if user is logged in, and transfers to login page if not
 if ($user) {
     header("Location: ./home");
     die();
@@ -59,6 +61,7 @@ if ($user) {
                         const username = document.getElementById("username");
                         const password = document.getElementById("password");
 
+                        // gets login tokens and uses them as cookie
                         async function handle_response(response) {
                             const json = await response.json();
                             if (json.error) {
@@ -70,12 +73,13 @@ if ($user) {
                             document.cookie = `session_token=${token}; SameSite=Lax; Secure`
                             window.location.href = "./home"
                         }
-
+                        // prevents the page from automatically reloading
                         function submit(event) {
                             event.preventDefault();
                         }
                         container.onsubmit = submit
 
+                        // sends request to write to database
                         login_button.onclick = async () => {
                             const response = await fetch("api/login", {
                                 method: "POST",
